@@ -1,0 +1,126 @@
+Dimensions and Hierarchies, Fact Tables and Aggregations
+Presentation
+In this class, the hierarchies that can be built in the dimensional data model will be presented, both in the Snowflake scheme and in the Star scheme. Techniques for aggregating and consolidating data to optimize analytical queries performed in the Data Warehouse (DW) will be presented.
+
+Goals
+Examine the possibilities of data navigation with the construction of hierarchies, with the dimensions organized in the Snowflake schema or in the same dimension in the Star schema;
+Describe the process of aggregating and consolidating data in Facts tables in order to optimize the queries that will be submitted.
+dimensions
+As we have already studied, the Dimensions tables contain descriptions of the events that occurred. They usually have many low-cardinality text columns and their attributes play an important role in filtering queries or aggregating the data contained in the Fact table.
+We learned that dimensions can be normalized or denormalized when they are normalized in the Snowflake scheme, which specializes dimensions in hierarchical decomposition. Thus, dimensions are organized into levels, where one is related to the other through the primary key. This relationship presents a hierarchy that establishes the levels within a context. Next, we will understand how hierarchies behave, what the benefits are, and how they are represented in the Star schema.
+
+hierarchies
+A hierarchy establishes the relationship between elements of a dataset in a context. Hierarchies are organized into levels, where the highest level is the element that groups the others, which are below. This allows the data in the Fact table to be viewed as you browse the hierarchy, in a grouped (highest level) or detailed (lowest level) mode.
+Some dimensions have attributes that form a hierarchy. These attributes have a relationship that establishes the priority order of the elements. For example, in the DW Supermarket dimensional data model, the Date dimension has a hierarchy formed by the elements Day, Month, and Year.
+
+ 
+The following figure illustrates the Date hierarchy, which is made up of the Year at the highest level of the hierarchy, the month at the intermediate level, and the day at the most detailed level. With the basic date data it is possible to create intermediate elements that group the less detailed data. For example, we can group days into weeks, months into bimester, quarter, semester, among others.
+
+Date Hierarchy
+year - trimestry - month - week - day 
+In Star schema, the data is denormalized in a single dimension table. In this case, all attributes are columns of the same table. See the example of another hierarchy often used in Data Warehouse projects, the Geographic Region, which lists the data Country, Region, State, City and Neighborhood.
+
+The figure shows the Geographic Region Dimension and its columns provide the entire region hierarchy containing the Country, which is the highest level of the hierarchy, the region, state, city and neighborhood, which is the most granular level of this view.
+geographic region: code region 1 2 3 
+country brasil brasil brasil 
+region southwest ... 
+state  sp rj pr 
+city sp rj ctba 
+neighborhood morumbi downtown alto da gloria 
+Some hierarchies can be represented without repeating elements in the lines. This type of solution uses table autorelation, where a foreign key points to the primary key of the table. See an example of a staffing hierarchy. Note that Joan is the president and therefore she is the first level of the hierarchy; below it are the managers Júlia, who has a subordinate, Miguel who has no subordinate, and Ricardo, who has two subordinates.
+
+The dimension accommodates the hierarchy relationship through the Top Code column, which is used to return a query about employees and their superiors. To return the values, the query must assemble the hierarchy by applying a recursive search, in which the Superior Code column will be related to the Employee Code column of the same table.
+
+Tip
+Hierarchies are very useful for navigating data and make it possible to perform Drill-Up and Drill Down operations, detailing more or less the data contained in the Fact table, as we saw in a previous class.
+
+Dimensions are loaded with elements contained in transactional database table. The first data load in the Data Warehouse must insert all existing elements in the Source table, considering some rules that may exist, such as loading only active records into the DW. An example of this are old customers, who, in the source system, were given inactive status for not making purchases in the last five years.
+
+After the first load of data, the elements are updated as they are updated in the source system. Normally, changes in dimensions happen sporadically. However, if we think of a large company and its size of customers, with 30,000 active customers, it can be updated daily, as the volume of data is very large.
+
+In addition, a dimension of this size can receive new customers daily and even cancel active ones.
+
+Example
+For example, a telephone company that daily sells phone packages to new customers or several others migrate to another operator and need to be cancelled. The records of these customers need to be updated with the current status, with the date of cancellation, among others.
+Some businesses need, in addition to tracking facts over time, to maintain the history of attributes to analyze the data according to the situation at a moment in time, but not in relation to the fact but to the context that describes it. For an organization, it can be important to keep track of the marital status of clients, not only if they are married, but if they were single when they became clients.
+
+To resolve these issues, there are some solutions that can be applied, such as creating a support table that stores historical information about attributes, relating the dimension and what changes have been made; for each dimension, create a support table that saves only the changes of the desired attribute; or even in the dimension itself, create columns to inform the effective date and end date of the record, in which the record with the end date closed keeps the data unchanged and the new record with a new date of effective start receives the changes made by the source system.
+
+historical dimensions: 
+
+See an example of a direct change to the existing registry (Customer Dimension 1) and an example of a change with start and end dates for the registry.
+
+With the effective date and end date columns, it is possible to know that from 11/03/2001 to 26/06/2010 José was in the customer base with the Married status. This type of information can, for example, be useful for offering products aimed at the situation in which the customer is.
+
+The Facts tables store the metrics that will be described by Dimensions. The greater the granularity of the Fact table, the greater the number of records it contains. The atomic grain stored in the fact table guarantees that any query submitted by the user can be answered.
+
+To aggregate the data contained in the fact table, some functions are applied to the metrics so that the data is presented as needed by the user. These functions perform sums on metrics (SUM), display the smallest or largest value of a metric (MIN and MAX), perform counts (COUNT) and apply averages (AVG).
+
+know more
+Performing these calculations on a fact table with millions of records, at the lowest grain, is very onerous for visualization tools. The report or dashboard takes a certain amount of time to display the result of the query and this can cause inconvenience due to the delay of information. To solve this problem, we can work with data aggregation to improve query performance.
+Aggregate Fact Table
+Data aggregation is a summary of the data from the fact table that aims at a good performance of the Data Warehouse queries. This feature is cost-free for the project and can avoid hardware investment. Thus, the cost-benefit becomes very attractive for performance improvement.
+
+Heads up
+The Aggregate Fact table stores pre-calculated information according to the level of granularity, which is higher than the Transactional Fact table, which presents the data at the most detailed level. For this reason, this type of table has less data volume than the Transactional Fact table.
+
+Data loading and updating can be done with data read directly from the source system or transactional fact tables. If the aggregation source is Transactional Facts tables, then aggregate tables do not need temporary tables to support the ETL process as the stored data is already validated. However, if the data is read directly from the transactional system, there is a possibility of a problem. So, it is recommended that the reading is done based on the temporary table of the Fact table.
+
+To create an Aggregate Fact table you need to analyze which facts are submitted or will be constantly submitted to the aggregation functions and by what attributes they are or will be aggregated. This dataset is a strong candidate for becoming an Aggregate Fact table. If the submitted query presents data in a summarized form, but contains an attribute that is not present in the Aggregated Fact table, the query is directed to the Transactional Fact table that contains the requested combination.
+
+The following example presents data from the Sales Fact table at the order number, product, customer, and sale date level.
+
+Let's build the Aggregate Fact table based on one of the analyzes performed by Supermarket managers: what are the best selling products in the summer?
+
+Note that the need is to evaluate product sales to build the aggregated table for product-related analytics. We can aggregate the data preserving only the dimensions that are part of the analysis context. In this case, we'll keep the product, product category, date of sale, and metrics. See the result.
+sk_product_sales 1 2 
+sk_category_sales 6 8 
+sk_data_sales 20200917 20200917 
+qt_product_sale 19 3
+vl_product_sale 10,52 23,15 
+''
+Facts Tables
+This behavior is reflected in the dimensional data model that will receive the aggregate table design keeping only the relationship with the dimensions that will serve the product-focused analyses. The aggregated table ag_product_sales only holds the keys for the Product dimension and the Date dimension.
+
+Aggregate fact table model agr_sales_product
+agr_sales_product 
+sk_product_sales INTEGER NOT NULL [ PFK ]
+sk_data_sales CHAR (8) NOT NULL [PFK]
+
+qt_product_sale INTEGER NOT NULL
+vl_product_sale DECIMAL (10,2) NOT NULL 
+
+In the Aggregated Fact table, the metric qt_product_sale represents the sum of the quantities of products that were sold on the day grain and the metric vl_product_sale represents the sum of the amounts paid for the products on the grain day.
+
+The Aggregate Fact table is transparent to DW users, as the visualization tool directs queries to the aggregates without interference and knowledge of who is submitting the query.
+
+know more
+Still on aggregations, we saw in a previous class that there are some metrics that cannot be summarized. These are non-additive metrics or those that can only be summarized by certain views, the semi-additive ones. Always be aware of what metrics you will apply to the aggregation so you don't get wrong or skewed values.
+
+Now add the Aggregate Fact table to the dimensional data model and relate it to the Product and Date dimensions. For Aggregate Fact tables use the prefix agr_.
+The main elements of the dimensional data model are the Dimensions tables and the Fact tables. About the dimensions:
+
+a) They can be organized in the Snowflake scheme, forming a hierarchy that enables data navigation.
+b) Do not provide attributes in hierarchy.
+c) They can only form hierarchies using the Snowflake scheme.
+d) In the Star schema the dimension cannot have hierarchies.
+e) Only one dimension of the Snowflake schema stores a hierarchy.
+A The. Dimensions accommodate attribute hierarchies in both the Snowflake and Star schemas.
+
+The Aggregate Fact table stores precalculated information at a higher level than the Transactional Fact table. About aggregated tables, it is correct to state that:
+
+a) They are more voluminous than Transactional Fact tables.
+b) They have a level of detail equal to that of the Transactional Fact.
+c) They are less voluminous than Transactional Fact tables and have a high level of detail.
+d) It has a greater level of granularity and less data volume than the Transactional Fact tables.
+e) They present a greater volume of data than the Transactional Fact tables and a lower level of detail
+d. Aggregate Fact tables summarize the data and thereby increase the level of granularity and decrease the level of detail in the data.
+
+Consolidated Fact tables aggregate data by joining content contained in more than one Fact table. For this:
+
+a) Fact tables can be consolidated without any data restrictions.
+b) The Fact tables must have a common view of the two subjects to consolidate data of different levels of granularity.
+c) The Fact tables must have a common view of the two subjects and the consolidated data must be at the same level of granularity.
+d) There is no need for a common vision of the two subjects, just being in the same DM.
+e) All views contained in the Transactional Facts tables must be taken to the Consolidated Facts table.
+c. Justificativa: Para que os dados de tabelas Fatos Transacionais possam ser consolidados é necessário ter pelo menos uma visão em comum entre elas e o nível de granularidade precisa ser o mesmo para sejam consolidados.
