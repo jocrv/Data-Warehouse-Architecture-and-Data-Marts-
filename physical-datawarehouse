@@ -1,0 +1,170 @@
+part 4
+Class 4: Physical Data Warehouse Project
+Presentation
+In this class, important points will be presented for the application of the physical design of the Data Warehouse/Data Mart (DW/DM) development life cycle. The data storage area and the importance of being prepared for the volume of data that will be handled in the DW/DM and the implementation of the model in the chosen Database Management System (DBMS) will be presented.
+
+Goals
+Examine patterns and constraints involved in the physical design of the DW/DM;
+Explain the existing needs for the implementation of the dimensional data model;
+Describe the implementation of the physical dimensional data model in DBMS.
+The Physical Project
+In the last class we learned about Dimensional Data Modeling, Star and Snowflake schemas and Dimension and Fact tables. In this class, we will continue the data track contained in the lifecycle of DW/DM (Data Warehouse/Data Mart) projects. The data trail, illustrated in Figure 1, is dedicated to data treatment and links the Dimensional Modeling phases, the definition of the physical project and the specification of ETL.
+
+So, as you already have the knowledge about dimensional modeling, you will now see the next step, which is the definition of the physical dimensional data model and what is needed to implement the dimensional data model so that it responds to queries from the user with good performance.
+Data Warehouse Project Life Cycle by Kimball
+The physical implementation of the dimensional data model considers the Database Management System (SGDB) chosen for the project and some other points that will be detailed below.
+
+The physical dimensional data model is based on the logical model created earlier and combines the established standards, business rules, the characteristics of the DBMS and the involvement of some specialists who will support and apply solutions so that the implementation of the model is carried out successfully , looking for a good performance in the analytic queries.
+
+For the DW/DM project to continue its development, the logical Dimensional Data Model designed needs to be transformed into a physical environment in which the data can be accommodated. At this moment, the characteristics of the SGBD must be observed, as the physical project uses this information for its construction and this can vary between the SGBDs.
+Constraint information and null values ​​must be carefully evaluated so that they are correctly applied in the physical design. Another important issue is the patterns used for the names of tables, columns, indexes, etc.
+
+The naming standard must be established even before starting to design the physical dimensional data model so that all elements correctly follow the definition. There is no mandatory standard to be used and usually the standard specified by the organization is used.
+
+The physical project involves, in addition to the tables of the dimensional data model, some support tables for the ETL (Extract, Transform and Load) process, which we will see later. These tables are called temporary tables and are the gateway to the staging area or maneuvering/data staging area.
+
+know more
+The staging area is the set of space and elements that lie between the source system and the data presentation area. Temporary tables receive the data extracted from the source system so that they can be treated in the ETL process and, only after the treatments, are accommodated in the Dimension and Fact tables.
+In addition to temporary tables, other security support tables, data “From To” tables and metadata tables can be built. The creation of these tables depends on the needs of the project being developed.
+
+The construction of indexes, partitions, and aggregate tables is also evaluated in this step. These features improve the performance of queries that will be submitted in the analytic environment and are very important for DW/DM that works with a very large volume of data.
+
+Next, we'll explore these points further and apply them to the physical design of DW Supermercado. Let's use the Retail Sales dimensional data model built in the previous lesson.
+Standard for naming elements of the Physical Dimensional Data Model
+Let's adopt the following nomenclature for the development of the dimensional data model elements:
+
+Dimension Table
+Fact Table
+Temporary Table
+Identifier key column
+code column
+numeric column
+description column
+Name column
+date column
+value column
+Dimension Table
+Dimension table names will begin with dim_;
+
+Some tools are case sensitive. Thus, to minimize future problems, it is recommended to define whether the names will be created in uppercase or lowercase.
+Dimension Table
+The Product Dimension contains the product code and product description data. Although information about the Product Manufacturer is stored in the Manufacturer table in the source system, it has been added to the Product dimension as an attribute. The dimension will receive the name dim_product, joining the prefix defined in the nomenclature and the word product that represents the elements of this dimension. Dimension columns must follow the same criteria for the formation of names.
+
+The following figure illustrates the design of the Product dimension with the physical names, data type and information about whether the column can be null or not.
+
+As we talked about in the previous class, the dimension contains a column that identifies a record in the table, the Surrogate Key. This key will be inserted in the Fact table (Foreign Key) so that the relationship between them is carried out. In the Product dimension, this key is called sk_product and is identified by the acronym PK of Primary Key.
+SQL Power Architect Community Edition tool (s. d.) to do the modeling.
+We already know that the Fact table gathers the metrics that will be analyzed by dimensions and that it is related to the dimension tables in the model. Now, let's understand the effects of this relationship!
+
+know more
+The Fact table receives all the primary keys for the dimensions that are linked to it. The Fact table usually has a primary key, and that key is a composite of the foreign keys of dimensions. The composite key guarantees that a record in the Fact table is unique, and if there are two records with the same key combination, there will be an exception that must be handled in the ETL process.
+
+Note the following model: the ft_sales table in the center of the model received, in addition to the metrics, the foreign keys corresponding to the primary keys of the dimension tables.
+Each record in the Fact table represents the sale of a product that belongs to a category, to a customer, on a given day. If the same customer buys multiple products on the same day, there will be multiple lines for that customer related to the multiple products purchased.
+
+Comment
+The order_num field is numeric data that cannot be summarized. It is the number that identifies the order in the transaction system. Some data may be important for analysis, but it does not have characteristics that define it as a dimension. In this case, they are added to the Fact table and are called degenerate dimensions.
+Integrity constraints serve to ensure that data correctly comply with the rules established for loading into the database. For example, in the Supermarket scenario, there are many sales of products on a daily basis. It is mandatory that we inform the product that is being sold, as it has the price that must be paid by the customer.
+
+However, customer data may not be informed at the time of sale in the physical store, unlike the sale made by the online store, where customer identification is mandatory. With this particularity, the customer's information can be filled in or not, and when the information is not filled in, we must consider an appropriate treatment for it.
+
+DW/DM dimensions can take the Not Informed and Not Applicable elements to solve problems of this type. The Not Informed element is used when a data has a null value in the data preparation area and the Not Applicable element is used when filling in a data for the record context does not apply.
+
+The following figure illustrates an example of the uniqueness of the primary key in the Fact table and the uninformed customer case. The code sk_cliente equal to 1 represents the Uninformed data. that, in lines 1 and 3 of the example, the customer is filled with element 1 - Not informed and as they bought the same product on the same day, the uniqueness restriction will be violated.
+sk_product 1 1 1 
+sk_client 1 100 1 
+sk_data 20200915 20200915 20200915 
+sk_category 6 6 6 
+qt_product_sale 10 2 5 
+vl_product_sale 10,52 23,15 10,52
+To solve this problem the order number must be added to the primary key of the Fact table. See the result.
+
+ft_sale 
+sk_product_sales: INTEGER NOT NULL (PFK)
+sk_client_sales: INTEGER NOT NULL [PFK]
+sk_data_sales: CHAR(8) NOT NULL [PFK]
+sk_category_sales: INTEGER NOT NULL [PFK]
+num_register: INTEGER NOT NULL [PK]
+
+qt_product_sale: INTEGER NOT NULL
+vl_product_sale: DECIMAL (10,2) NOT NULL 
+With this change, the problem of uniqueness of the data will be solved and the result obtained will be as illustrated below.
+
+num_register 10003 1004 1008 
+sk_product 1 1 1 
+sk_client 1 100 1 
+sk_data 20200915 20200915 20200915 
+sk_category 6 6 6 
+qt_product_sale 10 2 5 
+vl_product_sale 10,52 23,15 10,52 
+Restrictions pertaining to DBMS characteristics, such as filling in primary and foreign keys, are easily observed in the construction of the dimensional data model. However, restrictions on the part of the business, such as the Uninformed customer, are varied and must be carefully analyzed to avoid future problems.
+
+Temporary Tables
+Temporary tables support the ETL process. They receive the data that is extracted from the source systems and help with the treatments that must be applied to the data.
+
+know more
+In these tables there are no key restrictions, the data is copied and loaded without any criticism. After the data is loaded, its transformation can take place for the stored content. At that time, data validations, checking the existence of elements and keys, and integrating data from different systems, among others, are applied. The result of the validations is stored in these tables, as well as information about the cleaning of records, when it will be possible to inform that it must be loaded in the definitive table or discarded by the process. The ETL process will be detailed later.
+
+So, normally, for each of the Dimensions and Fact tables there is a temporary table that will support the data validation process.
+
+Stock Fact Table
+According to the gathering of requirements, for the construction of the queries it will be necessary that the dimensional data model contains the appropriate design to accommodate the data referring to the stock of products. With that, complete the dimensional data model with the Stock Fact table (ft_stock) and the relationships with the dimensions dim_product, dim_data and dim_customer.
+
+Comment
+An important note is that in order to relate the Stock Fact table to the dimensions it is not necessary to duplicate the Dimensions tables, as they should only be related to the new Fact table.
+
+Also add temporary tables to the model. They must not be related to any of the dimensional data model tables. As discussed earlier, they will support the ETL process.
+
+See the result of the model with the inclusion of the Stock Fact table and the temporary tables!
+
+In blue are the Dimensions, in orange the Fact tables and in green are the Temporary tables.
+The data storage structure of a DW/DM has available disk space, backup processes and must be supported by a group of important activities for the good performance of the DW/DM, such as the correct structure for the creation of elements with the standardized names.
+
+In case of DW/DM extension, it must be verified if the elements are adequate, if they are not being created repeated or if the data with already existing concepts are being inserted in the correct tables; maintenance of documentation, among others. The Data Administrator (AD) is responsible for these activities and is present in the development of DW projects.
+
+Another important activity is related to the Database Administrator (DBA), who is responsible for maintaining the database, its integrity and its creation. Furthermore, he is concerned with the performance of the base, very important for the DW that has large volumes of stored data.
+
+The partitioning of the Fato tables and the creation of indexes are tasks performed by the DBA so that the DW has a better performance in queries. Table and index partitioning is used to facilitate the management of large volumes of stored data. Partitioning divides the table into multiple tables and this division can be done vertically or horizontally. In horizontal partitioning, the number of rows is reduced in tables, and in vertical partitioning, the number of columns.
+Partitioning is usually based on time. For example, partitions can be created by month or year, and when a query is submitted for the year 2020, only the partition that has the dataset for 2020 will be queried.
+
+When data is grouped across partitions, the search is restricted to only the partition where the required data is stored. This minimizes query time as it prevents the table from being fully checked to bring up the requested data.
+
+Another feature that can be applied by the DBA are indexes. Indexes are structures that help you recover data faster. In DW/DM, which has a high volume of data, it is recommended to create indexes to optimize queries submitted to the database. For data with low cardinality, bitmap-type indices are normally used, but each case must be examined so that the best action is taken.
+
+In addition to the partitions and indexes that the DBA can create to improve query performance in the analytic environment, there are also data aggregations that are stored in tables. This point will be further explored in the next class.
+Dimensional Data Model Implementation
+After the correct preparation of the database, the implementation of the Dimensional Data Model can be carried out. Some modeling tools generate the script for creating the table, key, etc. elements. This feature facilitates the creation of the elements, but they can also be created directly in the DBMS following the definitions of the physical dimensional data model. The MySQL Workbenck and SQL Power Architect tools have this feature.
+
+ 
+SQl Power Architect allows you to choose the database in which the model will be physicalized. In our example, let's create it in PostgreSQL DBMS. The tool uses the connection created at the beginning of the model creation and executes the script creating the database.
+At this moment, the database for DW Supermercado is created. However, as the project progresses and even after completion, new needs may arise and so the model created may change to meet new demands. This work must be done with care to ensure that the model created and the data contained in it do not suffer losses due to the growth of the environment.
+
+Comment
+Normally, and it is highly recommended, the tasks are built in the development environment in which the tests are carried out, and only after these steps are changes carried out in the production environment. In larger companies, there is even a third environment called Homologation, where the elements developed and changes made in the process are tested by the user. Only after this step can the change be reflected in the production environment.
+
+In this class, we study the physical design of the dimensional data model, some restrictions that must be considered, some relevant aspects for data storage and for the implementation of the physical dimensional data model in DBMS.
+About the physical dimensional data model:
+
+a) It is built based on established standards, business rules and takes into account the characteristics of the DBMS.
+b) It is independent of the SGBD used and takes into account the established business rules.
+c) It is built based on business rules and does not consider the characteristics of the DBMS used.
+d) It does not follow specific standards, but is supported by business rules and takes into account the characteristics of the SGBD.
+e) It is built based on established standards, without business rules and takes into account the characteristics of the DBMS.
+A. It is recommended that the physical dimensional data model follow a defined pattern. It must follow the business rules and must consider the characteristics of the DBMS so that it can be physicalized in the database.
+Integrity constraints guarantee the established rules for loading into the database. About this statement:
+
+a) Does not apply to dimensional data models.
+b) Can be applied to dimensional data models, but can be disregarded.
+c) It is applied to the dimensional data model and ensures that important relationships are respected.
+d) Applies only to Date and Fact dimension tables.
+e) Applies to temporary tables only.
+C. Integrity constraints ensure that relationships between dimensions and the Fact table are followed correctly so as not to generate inconsistent data in analytic queries.
+
+About data storage of a DW/DM project:
+
+a) It doesn't take up a lot of disk space; therefore, just create the physical data model in the database available in the organization.
+b) The only measure to be taken to improve the performance of analytic queries is to increase disk space.
+c) There are no specialists who can dedicate themselves to the tasks involved in a large data storage like a DW.
+d) It is not possible to perform partitioning due to the volume of data stored.
+e) The available disk space, backup processes, partitioning, among others, must be evaluated.
+E. Data warehousing has experts who keep the environment healthy by evaluating available disk space, backups, partitions, indexes, patterns and documentation, among others.
