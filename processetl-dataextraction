@@ -1,0 +1,114 @@
+ETL Process - Data Extraction
+Presentation
+In this class, the ETL process, possible data sources (structured) and (unstructured), the frequency of data extraction, extraction methods, extraction process documentation and the ETL tool will be presented.
+Goals Analyze the ETL Process; Describe data extraction techniques; Examine ETL data sources and tools. ETL Process - Data Extraction, Transformation and Loading
+The ETL Process (Extract, Transform and Load) is an important and significant step in a Data Warehouse (DW) project. The construction of the ETL process follows the data track contained in the lifecycle of DW/DM projects (Data Warehouse/Data Mart) right after the definition of the DW/DM Physical Project, as illustrated in Figure 1.
+The ETL process is responsible for extracting the data from the source systems or files where the data is contained, applying the necessary treatments to the data and loading them into the definitive DW/DM tables. This stage is the most costly for the project due to the challenges encountered in capturing data in the source systems, in the integration of data from various sources, in the traffic environment, in the teams involved, among others (KIMBALL, 2013) estimates that the process of ETL can take up to 70% of the development cycle of a DW/DM project.
+The construction of the ETL process is based on the inputs collected in the Requirements Survey stage, at the beginning of the DW project lifecycle. Of course, as you move along the data trail, new requirements and needs may occur and these must be added to the project requirements documents and considered in developing the ETL process.
+Heads up As the development of the ETL process evolves, business constraints are applied to the handling of data that has entered the process and its output will result in data conforming to its nature at the source and as per the rules applied during the transformation. All of this information needs to be documented to meet the organization's compliance/compliance requirements. Data traceability is of paramount importance when there is a need to prove that it is correct and has not been tampered with during the ETL process.
+The quality of the data to be extracted from the databases is a point to be discussed. In order for the DW/DM to present coherent and reliable data, it is essential that the source system provide quality data. In many cases, the DW/DM ends up being an environment that validates the data from the source system and the notes of problems found must be directed so that the responsible team can correct them and improve the quality of the data entered in the system.
+The security of data stored in DW/DM is also a topic that should be addressed during the project. It must be evaluated whether all users who will have access to DW/DM will have access to all data. If there are access restrictions, user control or visualization control, they should be studied to map how they should be applied to the analytical environment.
+Data integration, which aims to bring together and make available common analysis on issues focused on different systems, is a very important factor in the ETL process. At this point, the understanding carried out in the gathering of requirements will support the development of adequate relationships to compose analysis scenarios that, without this process, is very difficult to carry out.
+more: The availability of data in the analytical environment is related to its readiness in the source system and its transfer to DW/DM. Users' needs can be varied and this reflects on the data load. However, this load depends on some variables that need to be known and attended to so that the data is delivered according to your demand.
+This study must be carried out and discussed with users for a good understanding and mapping of these needs, as a change in this sense requires great effort to be met.
+In this phase of the project, generally the tools that will be used were discussed by the team and are already defined. Currently, there are several tools for extracting data and for building the OLAP layer. The development of this stage should suit the requirements of each of the chosen tools, as they have different ways of working and this choice should be based on the organization's conditions and needs.
+Ralph Kimball divides the ETL process into subsystems and highlights four main components: data extraction, cleansing and compliance, delivery and management. In this class we will work the first component and understand how it is developed and what is necessary for its development.
+E (Extracting) - Data Extraction
+The first step in the ETL process is data extraction. This is the gateway to data from transactional systems or source systems, because we may have data obtained from other types of data sources, such as text files. The figure illustrates data collection from data sources and storage in temporary tables.
+This task is performed with the support of data mapping performed in the survey phase. At that time, it was identified whether the data existed in the source systems indicated by the business area and confirmed by the technical analyst responsible for the sources. The sources must be confirmed and the existence of the data validated before they can be extracted. It must be verified if the rules for the extraction will be met by the disposition of the data and if there are support columns for reading the data, such as columns for the update date of the records.
+more// The first data extraction for the DW comprises a period of historical data existing in the source system. From the first load, the DW should receive the new data entered in the source system or the data that was changed. Both the initial load process and the incremental load process must be prepared for data input.
+Due to the volume of data in the DW, it is not recommended that the data be completely erased and loaded with each load performed. Then, new or changed data must be selected to be taken into the incremental data process. Usually some mechanisms are used to know that a record has been changed in the legacy system, for example, in the source system's customer table there must be a column that records the record's update date and the extraction process will check if the date of change corresponds to the period of movement of the load.
+The change control process for records is not a simple task to be performed and demands a lot of attention and study of the source systems. Another issue that needs to be carefully addressed is the need to extract data from different systems, each with its own characteristics and particularities. Data sources can be structured or unstructured and this requires different treatments for reading the data.
+
+ Data sources (structured) and external data (unstructured)
+See more information on structured, semi-structured and unstructured data.
+Structured data is data stored in structures designed to accommodate them with known semantics, data type, size, that is, they have a defined pattern. Data stored in a DBMS are considered structured data because they present a well-defined pattern, with metadata.
+Semi-structured data that has some structure but is not critical with data types, for example. Examples of semi-structured data are XML, JSON, RDF and OWL files.
+Unstructured data is the opposite of well-structured content. They do not have explicit semantics, there is no standardization in the data. Examples of unstructured data are text files and web pages. With the growing volume of data available on the internet, there is an awakening in the ingestion of these data in order to complement the DW/DM data for analyzes based on this rich repository or even build a DW/DM based only on this type of data.
+The extraction of structured data is simple compared to other types, as the metadata facilitates the understanding of what will be extracted and how it should be treated. The extraction of unstructured data involves treatments to clarify the meaning of the data.
+Examples of treatments are: data processing in natural language (PLN) and the use of semantic instruments. After extracting the data, it can be organized and processed for consumption in analytical systems.
+Some extraction processes are developed in procedural language, which access files created by data source systems, usually COBOL systems. The procedures were created to access the files, read the data contained in the files (it is noteworthy that these files have a pattern for identifying the data) and load the data into temporary tables. Likewise, data transformation and loading into definitive tables also occur by procedures.
+These processes need to be very well managed so that data processing takes place correctly.
+Then, maps must be developed to monitor the process chains, obeying their order of execution, as well as the dependencies of other flows that need to be checked. Imagine uploading the sale without informing you of having the data previously uploaded! As there is a data restriction between the customer and the sale of the product, there would be a violation of data integrity and, consequently, the registration would be lost or the load would be paralyzed.
+To assist this process there are ETL tools. They make it simpler to extract different data sources, facilitate the reading of semi-structured text files, the application of rules and data validation, the construction of flows (task sequence), among others. Its graphical environment brings a more intuitive development for developers, making work more productive.
+There are several ETL tools on the market, each with its own characteristics, but which have the same objective: extracting from a source, transforming and loading data into a destination environment. Some examples of tools are: Informatics Power Center, Oracle Warehouse Builder (OWB), SAS ETL Studio and Pentaho Data Integrator (PDI).
+In the exercises, we will use the Pentaho Data Integrator (PDI) tool, available at: https://sourceforge.net/projects/pentaho/files/. Let's get to know the tool later on!
+
+ETL process documentation
+In this phase, it is important to document everything that is being done to extract the data, such as which tables are being copied from, which fields, which treatments will be applied to each of the fields and in which tables and fields they will be added.
+
+The following figure illustrates an example for the extract document. The set of columns that make up the Data Extraction group maps the address of the data being extracted. The Origin column informs if it is a table and the table name, the Field column informs the name of the field that will be accessed, the Type column indicates the field's data type, the size column informs the maximum data size.
+The Temporary Load column set tells which temporary table will receive the extracted data. The Table column informs the name of the temporary table and the Field column informs the name of the field in which it will be inserted.
+ The Transformation/Business Rules column informs the treatments to be applied to each of the columns contained in the temporary table so that the data can be loaded into the definitive table.
+ The Data Load column set informs the destination table and the fields in which the data will be inserted. The Table column informs the name of the Dimension or Fact table, the Field column informs the name of the field that will receive the data, the Type column informs the type of data that will be inserted, the Size column informs the maximum size of the data that can be inserted and the Observation column contains important data about the data contained in the field.
+Pentaho Data Integrator (PDI)
+The first step to be performed in data extraction is accessing the database in which the data is stored. After accessing, the data is selected according to the adopted criteria, copied and inserted in temporary tables, defined in the data modeling.
+
+Now let's get to know the PDI tool. It is open source and part of the Pentaho platform toolset. Its installation is simple, just download the compressed file named “pdi-ce-xxx-xxx.zip”, where “xxx-xxx” is the number of the last version available, and unzip it in some place where it will be executed, which can be on any disk drive, including a pen drive.
+Its graphical interface is known as Spoon, opened with the execution of the same name and it is where transformations and jobs are created. The transformations perform the data treatment tasks through steps called steps and the Jobs gather the transformations, sequencing the activities to be performed.
+The figure illustrates Spoon's home screen, where on the left side are the objects called steps and on the right side the workspace where the streams are created.
+To start development, it is necessary to establish a connection with the database in which the data will be read and the database that will receive the data extracted from the source system. To do this, right-click on the Transformations object. On the Connections object, right-click.
+Then, the connection creation window will open, illustrated in the figure below. You must inform the DBMS access data and the name of the database.
+After filling in the data, test the connection. Create a connection to the source database (conexaoBD), where the data will be read and a connection to the destination database (conexaoDW), where the data will be stored.
+After connecting to the database, the construction of the data reading flow can be started. This is done by creating a transformation (transformation), which is a sequence of steps connected by arrows called hops. The first objective is to read the data contained in the supermarket's base. For this, it is necessary to use a data reading step. Then add a Table Input step, which can be found in the Design tab.
+As we will see in the following figure, open the object and give the step a name, for example Read Category Table. In the Connection combo, choose the connection with the data source database. In the SQL field, type the query for data collection. If you want to check the result, click on the Preview button.
+Save the transformation with the name Transf-Category-Product. Add a step Add sequence so that it relates the sequence created to the temporary table. The Value Name field will be the name of the field referenced in the next step. Select the connection with the database in which the data will be inserted and the name of the step Sequence created in the DW database.
+Data collected on the source system will be inserted into the temporary table through the Table Output step. Link the step Sequence to the destination step so that you can view the id_categoria_seq field. To do this, just hold the Shift key and drag to the other step. The steps must be linked in sequence Source Table > Sequence > Destination Table.
+
+Enter a name for the step, select the DW database connection, select the target table name. Check the Truncate Table option, so that the process clears the temporary table at each new execution and the Specify database fields option so that you can list the source fields (Stream field) and the destination fields of the data (Table field), in the Database fields tab.
+When you finish building the flow, click the Execute this transformation button, represented by the arrow in the upper left corner as illustrated in the image.
+
+ Spoon - Execution of the transformation. Source: Pentaho (2020)
+After the stream runs, the data is loaded into the Category temporary table.
+Note that not all columns in the temp table will be populated at this time. The sk_categoria_tmp column will support data validation and will receive the primary key of the Category dimension, if the element exists in the table. If it does not exist, it will be inserted as per the rule defined in the extract document.
+
+Tip
+With the acquired knowledge, build the data read flows for the temporary customer, product and sales table. To use them, click on the following links to download the materials:
+
+Data base
+
+stock base
+Reading data from an Excel file
+To access a file in Excel format, use the step Microsoft Excel Input. Add this step to a new transform and save it as Transf-Stock.
+
+In the File or directtory box, choose the Excel file where the stock data are located and add it to be visualized in the Selected Files section. On the Sheets tab, click on the Get sheetname button to select the Excel sheet tab where the data to be collected is located. On the Fields tab, click the Get Fields from header row button to add the fields from the spreadsheet.
+Add the Add sequence and Table Output steps to load the stock temporary table and run the flow
+You can use the Excel spreadsheet (basestock.xlsx) for the Inventory source table available in a download file.
+The PAN and Kitchen tools
+As mentioned before, Spoon is the graphical interface that allows the construction of the task streams that will be executed. PAN is a program that performs transformations in the DW/DM production environment. And Kitchen is a program that runs Jobs, which consist of sequences of transformations. Both tools run batch streams.
+
+Frequency of Data Extraction
+The frequency of data extraction was defined in the previous steps and at that time it will be used to schedule the ETL process. According to the definitions, Jobs will be executed automatically, as well as the entire sequenced chain.
+Heads up
+The charging frequency is defined based on the organization's needs. Some systems require the upload to be carried out several times throughout the day so that the information is as current as possible, while others are uploaded monthly.
+
+When the DW/DM load depends on the release of other systems, the process must check if the predecessor was released so that the load can be started. It is important to respect the predecessor tasks so that there are no problems with data inconsistencies.
+
+The PAN and Kitchen tools
+For this flow to work properly, there is a need for load control, precedence and task management tools to help monitor tasks.
+
+In this class we studied the ETL process, its purpose, the extraction methods, types of data sources and learned about the ETL PDI tool and how to create a data extraction process.
+
+Now, let's fix the understanding!
+The ETL Process is one of the stages of the Data Warehouse project. He is responsible for:
+
+a) Define the business rules and load the data into the DW/DM target tables.
+b) Extract the data from the source data sources, transform the data and load it into the target DW/DM tables.
+c) Withdraw the data from the source data sources, transform the data and load it into the destination tables of the DW/DM and the transactional system.
+d) Apply treatment to data that is on source systems before extracting to DW/DM.
+e) Extract the data from the source data sources, transform the data and load it into the destination tables of the source system.
+B. The ETL process is responsible for collecting the data from the source systems, making a copy and inserting them in the temporary tables, to apply the treatments and business rules and load them in the definitive DW/DM tables.
+Regarding the data sources that feed the DW/DM, it is correct to state that:
+a) Data can only be extracted from structured databases.
+b) The data must be in the same source system.
+c) They can be structured and semi-structured.
+d) They can be structured, semi-structured and unstructured.
+e) They can be semi-structured and unstructured.
+d. The data that supply the DW/DM can be structured where its metadata is well defined, it can be semi-structured, which has structure, but is not rigid when the data is contained and not yet structured, requiring treatments to apply semantics and enable the load of the data in an organized way.
+The ETL process can be done through procedural language and tools that help the development of tasks. The ETL Tool:
+a) It applies treatments to data previously stored by another data reading service and loads the data into the destination database.
+b) It connects to the source database, from where the data must be read, inserts them in a temporary area, performs processing tasks, but does not load it into the destination database.
+c) It connects to the source database, from where the data must be read, copies the data, inserts them in a temporary area, performs processing tasks and loads the data into the destination database.
+d) It is limited, only performing treatments on data that are already entered in the DW/DM database.
+e) It connects to the source database, from which the data must be read, inserts them in a temporary area, but makes it difficult to store the data in the destination database, as it cannot make more than one connection with the DBMS.
+ç. The ETL tool is a very important resource for the DW/DM project, as it facilitates a step that is very costly for the project, which is data extraction, data processing and later loading in the definitive tables.
