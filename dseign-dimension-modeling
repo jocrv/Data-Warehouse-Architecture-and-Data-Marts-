@@ -1,0 +1,226 @@
+part 3
+
+Lesson 3: Data Warehouse Design: Dimensional Data Modeling
+Presentation
+In this class, the Dimensional Data Model that organizes the data presented in the analytical environment will be presented. The Snowflake and Star schemes and the main elements of the dimensional data model will also be presented.
+
+Goals
+Define the Dimensional Data Model;
+Describe the data modeling process for building the dimensional data model;
+Demonstrate the main elements of the dimensional data model: the Dimension and Fact tables.
+Dimensional Data Modeling
+As we saw in previous classes, the Data Warehouse (DW) aims to provide analytical queries over time. A DW's database is quite voluminous and, when processing queries, it consolidates historical data with high performance. The database is designed with the dimensional model so that it can respond to the analysis in a simple and fast way.
+
+Dimensional or Multidimensional Data Modeling is a technique that aims to organize the data in an adequate way to facilitate the reading of data and the assembly of analytical queries. Dimensional modeling differs from data modeling for operational support systems, as the models built for these systems do not have the objective of generating analytical queries, as they are aimed at transactional processes.
+The main difference between them is that the transactional systems model is normalized, with integrity constraints and no data redundancy, and the dimensional data model is not rigid in this regard and can be denormalized, consisting of Dimension tables and Fact tables , with data redundancy.
+
+Normalization in a database aims to eliminate or reduce data redundancy, maintain its integrity and reduce storage space. The objective is to reduce problems during the insertion, deletion and alteration of records in tables and to facilitate data maintenance. A dimensional data model does not have these concerns, as its main focus is to answer queries quickly and efficiently.
+
+Comment
+In the denormalized model, data in dimension tables may be repeated in tables because they are not subject to frequent changes. This takes up more storage space but responds to queries faster by avoiding join operations.
+
+The following figure illustrates an example of normalization, where the product category data is in a separate table from the product data. The Product Category table is composed of the category identification and category description fields. The SK Category field is the category identification field and it is the link field with the Product table. In the denormalized example, the category description is contained in the Product table.
+Identifying Dimensional Data Model Tables
+The 5W and 3H methodology (used in Business Process Modeling) is used in mapping organizational activities and helps to understand and identify the tables of the dimensional data model. In the center of the design are the questions that deal with the measurable data (How many/How much), in the dimensional data model, represented by the Fact table, which will answer, for example, how many products were sold and for what value.
+
+The questions around the center of the drawing help to identify the Dimensions tables, describing the event:
+
+When – When? It suggests the time view (Date) widely used in DW/DM;
+
+Where – Where? It suggests the place where the event happened;
+
+What – What? Suggests the description of the fact that occurred; for example, what was sold?
+
+Who – Who? It suggests who performed the fact; for example, who bought the product?
+
+Why – Why? It suggests an explanation of why the event occurred; for example, why did the customer buy the product?
+
+How – How? It suggests the way in which the event occurred; for example, how did you pay for the product?
+
+Dimensional modeling has two types of schemes: Snowflake and Star.
+Star Schema
+The Star schema organizes the Dimensions tables around the Fact table, as illustrated in Figure 2. Dimensions describe the occurred facts contained in the Fact table. Dimensions can represent data hierarchy and, in the Star schema, this hierarchy is contained within the dimension, leaving the data denormalized.
+
+Star Schema example.
+
+Source: own author
+
+Snowflake Scheme (SnowFlake)
+The Snowflake schema is a derivative of the Star schema and presents the Dimensions tables in a hierarchy. In this scheme, data is normalized, avoiding redundancy in dimensions and data integrity issues. The following figure illustrates the Snowflake scheme, in which Dimensions 2 and 3 are linked to Dimension 1.
+Data retrieval in the Snowflake schema is more costly to assemble the queries, as the number of joins/relationships between dimensions is greater. Furthermore, it can make it difficult for the user to understand and implement in OLAP tools.
+
+As mentioned earlier, denormalizing data can cause data integrity problems. However, the Estrela schema presents greater speed in data recovery, facilitates the user's understanding and the assembly of queries.
+
+There are also models that use a combination of the two schemes, in order to apply the benefits that each one offers and develop the best solution for the organization's needs.
+
+Cube Representation of Facts and Dimensions.
+
+Source: Adapted from Kimball (2013).
+In both Star and Snowflake schemas, the dimensional data model organizes data into Dimension tables and Fact tables. Data organized in a dimensional data model can be represented as a data cube (or hypercubes, as they can have an unlimited number of dimensions), where dimensions are located on the cube's axes, and measures, contained in the Fact table, are located at the intersection of dimensions.
+
+Organizing data in a dimensional data model allows you to query a fact from multiple views, such as the quantity of a product sold to a customer in July 2020.
+
+Next, we will study these two types of tables, learn about their structure and understand how they are implemented in the dimensional data model.
+
+Dimensions Table
+Dimensions are tables that store textual elements that describe the facts that occurred. They answer the questions: What?, Who?, When?, Where?, among others. For example: Fact occurred: Product sale.
+What was purchased?
+1. Answer: The powdered milk product.
+
+Who bought this product?
+1. Answer: The customer Joseph.
+
+When was the product purchased?
+1. Answer: On 05/14/2020.
+
+Where was the product purchased?
+1. Answer: In the downtown district of RJ
+The Dimension table has a column that uniquely identifies an element in the table. This column is the primary key (PK - Primary Key) of the table also known as Surrogate Key (SK) or Artificial Key, of numeric type and is normally filled by a sequential incremental (4-byte integer type). It will be the link between the Dimension and the Fact table.
+
+The following figure illustrates the Product dimension. The Product SK column is the dimension key, the Product Code column is the product code in the source system, the Product Description column is the product description (name), and the Manufacturer Description column is the name of the Manufacturer.
+
+If the modeling were normalized, the Manufacturer Description column would be replaced by the SK Manufacturer column, representing the primary key of the Manufacturer Dimension.
+According to Ralph Kimball, dimensions are generally wide tables, that is, many columns, flat and denormalized, with many low cardinality text attributes. That's because the dimension can contain multiple descriptive columns, low number of records, columns that group table elements, and columns with little variation in their content.
+Columns in the Dimension table are called attributes. For example, in the Product Dimension there are 4 attributes. The SK Product Attribute identifies an element in the dimension and relates to the Fact table. The relationship of the dimension with the Fact table is one for many, that is, an element of the product dimension can be linked to N (several) records of the Fact table.
+
+The elements contained in dimensions qualify the queries, group and summarize the facts contained in the Fact table. Elements act as filters consolidating thousands of rows from the Fact table into a few rows.
+Example
+The Sales Fact table has 2 million rows that detail product sales for the year 2019. A query to display the value of products sold by month for the year 2019 will only display 12 rows, one for each month.
+
+Thus, the dimensions present greater or lesser data detail in the queries in which they are used. This movement is performed by data analysis operations, for example, Drill-Down, when we detail the data, and Drill-Up, when we aggregate the data.
+
+These operations can be observed in attribute hierarchies, where one attribute can be grouped by another. For example, products can be grouped into Product Categories when the soap product is part of the Personal Care Category.
+
+With the data view attribute hierarchy, we can perform the Drill-Down operation, detailing the sale of products per day, or group the data using the Drill-Up operation. Look at the example illustrated in Figure 6. The report shows the soaps sold by month, the Drill-Up performed for the year, and the Drill-Down performed for the day.
+Facts Tables
+Facts tables are at the center of the dimensional data model and relate to at least two dimension tables. They store the measures/metrics of the events that are described by the dimensions. The keys from the Dimension tables are added to the Fact table and their combination forms the identification of the records in the Fact table.
+
+know more
+The columns that represent the keys of the Dimension tables and the columns that represent the measures/metrics, also called Facts, are, in general, of the numeric type, representing quantities or values ​​that answer questions like "How much?" In some situations, columns of other types may be in the Fact table to resolve specific business issues (for example, alphanumeric data representing a transactional system object, such as an invoice, called a degenerate dimension).
+The Fact table has many rows, which are aggregated by dimension attributes. It can contain additive, semi-additive and non-additive measures.
+
+Additive facts
+Additive Facts are numerical data and can be summarized across all DW/DM views that are part of the context of the Fact table. For example, the Quantity of Products Sold can be analyzed by the Product, Date, Category view.
+
+Semi-additive facts
+Semi-additive facts are numerical data, but they cannot be summed across all DW/DM views due to their semantics. For example, the sales price of the product can be analyzed by the Product Dimension, but it doesn't make sense if we analyze the sales price by the Date Dimension (Date of Sale).
+
+non-additive facts
+Non-additive Facts are data that, even though they are numerical, cannot be summarized by DW/DM views. For example, a column containing the discount percentage offered to customers.
+Heads up
+In addition to these three types of measures, we have the derived measure. It is calculated based on other measures contained in the Fact table. Do you remember the Profit on Goods Sold measure mentioned in the previous class? It is a calculated measure based on the manufacturer's Price of Product Sold and Price of Product Purchased.
+
+Fact tables can be transactional, aggregated, and fact-less-fact tables. However, before we talk about the types of Fact tables, we need to remember the concept of granularity mentioned in the last class.
+
+ 
+Remember the granularity matrix shown in the last class? It helps to identify the grain that will be stored in the Fact table and is very important for the aggregation and presentation of data.
+
+the grain
+In gathering the requirements, the granularity matrix listed which views will describe the measures in the Fact table. In this document, we have information on the level of detail of the data and what will be the lowest level that can be analyzed in DW/DM.
+
+The grain of a Fact table represents how detailed the data in that table is. The atomic grain refers to the lowest-level data extracted from the transactional system. The lower the level of granularity of the data, the more detailed the data will be and this can ensure that the questions asked by the user will be answered.
+Example
+In the data view, we have informed that the measures of quantity of products sold and the sale value can be analyzed in the grand day, of a hierarchy that has a day, month and year.
+
+It is important that the facts contained in a Fact table are at the same level of granularity. During the requirements survey, we saw that the quantity of products sold is in the grain day and that the quantity of products purchased from the manufacturer is in the grain month. This means that it will only be possible to evaluate the two measures by the minimum grain month. Therefore, these two measures cannot be in the same Fact table.
+
+Now that we've remembered and understood the importance of fact grain, we can get to know the Facts table types, starting with the transactional type.
+The Transactional-type Fact table is the most common in DW/DM. It stores the most detailed level of the fact considering the grain defined for the Fact table. Data is extracted from the source system at the established level of detail and loaded into the Fact table. It is important to note that the more detailed the data, the more rows will be stored in the Fact table. A typical example is the table that records each product sale by branch, by seller.
+Periodic snapshot tables record data at a predefined time period, daily, weekly, or monthly. It is a snapshot of the transactional fact table in a period to be captured. A typical example is the table that records the current inventory of each product per day, by branch.
+Cumulative snapshot tables describe a business process with start date, milestone dates, and end date. At each completed step, the record is updated to add the ninth milestone. A typical example is the table that records the process of receiving, inspecting, storing and releasing products for sale in each warehouse.
+The Aggregate Fact table represents a higher level of granularity. Data is summarized by context views, decreasing the number of rows in the table and sometimes decreasing the number of dimensions related to the Fact table. The purpose of Aggregate tables is to provide faster analysis for views with a more specific objective, eg sales volume by month, by branch, by product. The lowest level of analysis will be the month. If it is necessary to evaluate a certain day of the month, the analysis must be submitted to the Transactional Fact table, which is more detailed.
+The Fact table without fact is named this way because it does not have a measure/fact column. It establishes the relationship between dimensions that respond to a given analysis. An example is the table that registers enrollments of students in classes of subjects of a course taught by a certain teacher, with the purpose of counting the size of the class, in order to make an offer viable.
+
+So far you've seen the main features of dimensional data modeling. Now that you are familiar with the terms used, it's time to organize the steps for building the dimensional data model.
+
+In the last class, we studied the initial stages of the DW/DM project, when we understood the importance of gathering requirements and mapping data sources for project development. The information collected will be used to build the dimensional data model, which will be seen below.
+Starting Dimensional Data Modeling
+The Dimensional Data Model is on the DW lifecycle data trail. This track is dedicated to data treatment and links the Dimensional Modeling phases, the definition of the physical project and the ETL specification. Based on the information documented in the requirements gathering and data source mapping phases, the dimensional data model can be built.
+dimensional modeling, physical design, etl design and development
+Supermarket Scenario Requirements
+During the requirements gathering process of the Supermarket analysis scenario, the following business requirements were identified.
+
+Reviews
+What are the best selling products in summer?
+Who are the customers with the greatest purchase potential in a given product group?
+Is the stock out of stock?
+Which are the manufacturers of the products that offer the greatest profit in marketing their items?
+visions
+Product (Referring to which product);
+Product Category (Referring to which product group);
+Product Manufacturer (Referring to which Manufacturer);
+Customer (Referring to which customers);
+Date (Referring to when sold to customer, when it was purchased from the manufacturer and sold in the summer).
+
+
+
+Matters
+Product Sales;
+Product Stock
+
+
+Measures
+Quantity of Products Sold;
+Quantity of Product in Stock;
+Price of the Sold Product;
+Price of the Purchased Product from the manufacturer;
+Profit from Product Sold.
+
+know more
+Still on the data model, it can be divided into three stages: the conceptual model, which represents the understanding of the business and the relationship between the tables; the logical data model, which considers some constraints, the pattern and nomenclature, primary and foreign keys, among others; and the physical model that considers the standards of the chosen DBMS
+Dimensional Data Model
+The design of the dimensional data model gathers the raised requirements and organizes the subject by drawing the dimensions and the Fact table expressing the relationship between them. The Estrela schema facilitates understanding for everyone involved in the project, especially for business users, due to its simplicity.
+
+The dimensional data model can be designed in an initial and more abstract way in the requirements gathering phase, in order to help understand the business and facilitate the understanding of the relationship between the data.
+
+The dimensional data model uses data modeling techniques (database content), which involve entities, attributes, relationships, cardinality, etc. and knowledge of the requirements identified in the Requirements Gathering phase.
+With the union of this knowledge, we can elaborate the dimensional model of the Product Sales subject. The views listed in the previous topic will be the model dimensions. They are: product, product category, product manufacturer, customer and date.
+
+Product Vision
+The Product view in the source system contains the Product Code data, the Product description, the Product Manufacturer's name, the Product Category description, the product's barcode and its expiration date. However, according to the survey carried out, the data necessary for the analysis are: Product Code, Product description, Product Manufacturer's name and Product Category description. Therefore, only this data will be added in the Product Dimension.
+
+As seen above, we can model the Product view in a normalized and denormalized way. The figure illustrates the normalized modeling for the Product and Category views.
+
+Normalized schema of Category and Product tables.
+The reading of cardinality expressed in the figure, according to Elmasri Navathe's definition, is: a category can have no products or can have several, and a product can be linked to only one category and must always be linked to a category. The tool used to make the model represents the relationship by the line that connects the two tables. This means that during the development of the load process these criticisms need to be validated. This will be detailed later.
+know more
+Other solutions to this relationship can be applied by placing the Category description within the product view, or linking the Product Category Dimension directly to the Fact table.
+
+According to Kimball, the Data Dimension is a special dimension because its presence in dimensional models is almost certain. This is because most analyzes are time related. In more current projects, the Date dimension uses the primary key with the formation of day, month and year (YYYYMMDD); at other times, the Surrogate Key was used as a table identifier.
+
+The Data dimension can be created in advance as its nature is independent of data from source systems. Kimball provides a date dimension model on its website that can be adopted in any project. The dimension has a set of attributes that meet various needs, however you can add new attributes according to the project to be developed.
+Tip
+We will use the Date Dimension defined by Kimball (KIMBALL, 2013) in our exercises. For that, you can download the spreadsheet that contains the DDL command to create the table in the database and the insert instructions to populate the dimension. You can add the table to the dimensional data model or leave it to create and relate to the Fact table after implementing the physical model.
+
+The examples were built in the SQL Power Architect tool (s. d.), but there are other tools to aid in the modeling. See topic Explore+!
+
+Now that you know the advantages and disadvantages of modeling types, you can choose which one best fits the solution you are building. Let's practice?
+
+Build the modeling from the views contained in the survey. Don't forget to include Product, Category and Manufacturer views!
+
+After drawing the Dimensions, we must add the Fact table to the model. For the Sales Fact table, the measures of the Sales subject must be considered and the dimensions must be linked to this Fact table. The Fact table will contain the measures Quantity of Goods Sold and Price of Goods Sold. Note the result below.
+Dimensional scheme (star) of Sales to Retail.
+Dimensional Data Modeling, Star and Snowflake modeling types, Dimension table and Fact table, and conceptual model design.
+Dimensional Modeling is a technique:
+
+a) Which aims to organize the data in a simple way to facilitate its reading and the assembly of analytical queries, and is the same as data modeling for operational support systems composed of Dimension tables and Fact tables.
+b) Which aims to organize the data in a simple way to facilitate its reading and the assembly of analytical queries, and its data model is normalized.
+c) Which aims to organize the data in a simple way to facilitate its reading and the assembly of analytical queries, and its data model is normally denormalized, consisting of Dimension tables and Fact tables.
+d) Which aims to organize data in a simple way to facilitate transactions processed in the transactional system, and is composed of Dimension tables and Fact tables.
+e) That aims to organize the data in a simple way to make it easier to read and facilitate the daily operations of the organization, and its data model is normalized.
+C. The Dimensional Model, composed of Dimension tables and Fact tables, aims to organize the data in a simple way to make it easier to read, aiming to assemble the analytical queries more quickly, summarizing the data. The dimensional data model can be designed based on two schemes: the Star scheme (denormalized) and the Snowflake scheme (normalized). Normally, it is denormalized aiming at better response time in queries.
+The dimensional data model can be based on the Star schema or the Snowflake schema. About this it is correct to state that:
+
+a) In the Star schema, the dimensional data model is composed of Dimension tables, which are in the center of the model, describe the facts and are denormalized, bringing the benefit of more efficient queries.
+b) In the Star schema, the dimensional data model is composed of Dimension tables and Fact tables, in which the dimensions describe the facts and are denormalized, bringing the benefit of more efficient queries.
+c) In the Snowflake scheme, the dimensional data model is composed of Dimension tables and Fact tables, in which the dimensions describe the facts and are denormalized, bringing the benefit of more efficient queries.
+d) In the Snowflake schema the dimensional data model is composed of normalized Fact tables, bringing the benefit of more efficient queries.
+e) In the Star schema, the dimensional data model is composed of Dimension tables and Fact tables, where dimensions describe facts and are presented normalized, bringing the benefit of more efficient queries.//B. Dimensions are tables that store the textual elements that describe the facts that occurred. The Estrela schema provides greater speed in data recovery, facilitates the user's understanding and the assembly of queries, as the Dimensions tables are denormalized.
+About the Drill-Down analysis operation in the geographic region hierarchy, it is possible to say that:
+
+a) Navigation can be done by detailing the data, from the highest level Region to the lowest level Bairro in the sequence: Region, District, City and State.
+b) Navigation cannot be done by detailing the data, from the highest level Region to the lowest level Bairro in sequence.
+c) Navigation can be done by detailing the data, from the lowest level Bairro to the highest level Region in the sequence: District, City, State and Region.
+d) Navigation can be done, but data cannot be detailed without the Time dimension being contained in the analysis.
+e) Navigation can be done by detailing the data, from the highest level Region to the lowest level Bairro in the sequence: Region, State, City and District./
+The Drill-down operation navigates from a higher point to a lower point in a hierarchy of attributes, detailing more or less data contained in the query.
