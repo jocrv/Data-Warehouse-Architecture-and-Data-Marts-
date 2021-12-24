@@ -1,0 +1,125 @@
+BI Applications - Analysis/Query Construction in Power BI
+Presentation
+This class will present: the M function to transform the data, the DAX function to add analytical calculations to the data, the construction of queries using views, the Power Query, applying filters to queries and publishing the queries on the server online of Power BI.
+
+Goals
+Demonstrate M and DAX functions;
+Examine the analysis in the OLAP Power BI tool and the analysis operations;
+Describe the publication of reports in the OLAP Power BI tool.
+Building analysis in the OLAP tool
+In the previous class we saw that the OLAP (Online Analytical Processing) tools are prepared to build and support the dimensional analysis present in the analytical environment. We are also familiar with Microsoft's OLAP Power BI tool, which is focused on strategic analysis, allowing you to create interactive views, in addition to having a simple interface that facilitates the creation of analytical applications, including by end users.
+
+Comment
+Analyzes identified as important and frequently used are built by BI analysts and, if the user feels the need to make new queries, he can build them himself or demand for the support team of the BI application present in the organization.
+
+The construction of predefined queries must be based on the needs mapped in the requirements survey and validated in the query specification phase. In our examples, we will use the queries mapped in a previous class, in the Supermarket scenario.
+
+Predefined queries:
+What are the best selling products in summer?
+Who are the customers with the greatest purchase potential in a given product group?
+Is the stock out of stock?
+Which are the manufacturers of the products that offer the greatest profit in marketing their items?
+To answer the first question, it is necessary to create a query to analyze the sale of products in a given period. So we need the Product and Date of Sale attributes and the Quantity of Product Sold metric.
+
+In the Date dimension, there are several columns that represent the date in different formats. However, to create the seasons of the year it is necessary to identify the representation of a certain day in the year and, as this information is not available in the date dimension, we will add it using the M and DAX languages.
+DAX and M functions
+Power BI uses two types of functions to create some features in analysis: M language functions and DAX language functions.
+
+ 
+The M language is used in the preparation and transformation of data in the query editor of Power BI, and also Excel. It performs tasks present in the ETL phase and is widely used when data need to be treated before being presented in queries. This may be necessary when data has not gone through the ETL process and needs to be displayed in query format, for example as raw data contained in an Excel spreadsheet.
+
+Example
+• Split Column – Separates elements from a column into multiple columns.
+• Combine > Merge Queries – Concatenates columns into a single column.
+• Add Column > Conditional Column – Adds a column, with If Then Else statement based on another column.
+
+The DAX language is used to perform analytical tasks such as calculations. Contains a set of functions, operators, and constants that are used in expressions to create new information based on the data present in the data model.
+
+Example
+• SUM - Sums all values ​​in a column.
+• IF – Tests a condition and returns one value if true, and another value if the result is false.
+• DISTINCTCOUNT – Counts the distinct values ​​of a column.
+To exemplify the functions, let's add a column in the dim_data table that informs the season of the year for each day. Seasons are identified by date periods: autumn starts on March 21st and runs through June 20th; winter starts on June 21st and runs until September 23rd; spring starts on the 24/09 and runs until the 21st of December; summer starts on December 22nd and runs until March 20th.
+
+As we do not have a column that presents this grouping in the Date dimension, we can create a column that represents the day in the year and then group the periods into seasons. So, to create the Day in Year column, let's transform the data by Power Query editor and create the new data from the full_date column.
+
+From the Home menu, click Transform Data. The Power Query window will open, which allows you to carry out transformations on the data contained in the data model. On the left side of the window are the model tables, on the top of the window are the Power Query resources and in the center of the table the work area, where the fields of the selected table are displayed. Just above the fields is a formula bar where expressions are added.
+
+ 
+The following figure illustrates the Power Query window with the dim_data table selected. The fields from the table are displayed in the workspace of the window. In the field header there is a submenu with the available data types. If necessary, the data type can be adjusted.
+Now, to create the new column with the day of the year in the Power Query editor, as shown in the figure below, click the Add Column menu, select the full_date column, navigate to the Date option, click and choose Day > Day in Year. The new column will be added to the end of the dim_data table.
+After adding the new column, navigate to the Home menu and click the Close and Apply option.
+
+In the Data Panel, you can see the new Day of the Year column. It will be used with the DAX SWITCH function to generate the stations. The SWITCH function works similarly to the IF function, however it is simpler when several conditions need to be tested.
+
+ 
+The SWITCH function returns a value for each expression, which evaluates to true. The function uses the Day of the Year column illustrated below, where, for example, the Day of the Year number 80 represents the 21st of March, pointed out as the start date of autumn.
+Thus, we need to check the dates that comprise the periods and for that the expressions to be tested are defined as:
+
+dim_date[Day of the Year] >= 80 && dim_date[Day of the Year] <=171 ,"AUTUMN",
+dim_date[Day of the Year] >= 172 && dim_date[Day of the Year] <=266 ,"WINTER",
+dim_date[Day of the Year] >= 267 && dim_date[Day of the Year] <=355 ,"SPRING",
+dim_date[Day of the Year] <= 79 || dim_date[Day of the Year] >=356 ,"SUMMER"
+
+After applying the function, the column Season of the Year is defined in the dim_data table and ready to be used in the query.
+In DW/DM projects, there is often a considerable variety of measures, and from these, other calculated measures can be created. If they're scattered across the folders representing the Fact tables, it's confusing to locate them.
+
+So, so that the measures are organized and easy to find, we can create a folder and leave them pre-formatted for use in queries. To do this, go to the Home menu > Insert Data > Create Table. Enter a name for the table. It will be displayed in the Fields Panel.
+
+To create the measures, right-click on the Measures folder and choose the New Measure option. A bar will open for the construction of the measure, as illustrated in Figure 5. Type a name for the measure and complete it with the sum function to summarize the Quantity of Products Sold.
+
+Likewise, create the measures:
+Inventory Qty = SUM(agr_profit_product[qt_product_stock])
+Revenue = SUM(agr_profit_product[vl_recipe])
+
+As the measure Revenue represents value in currency, it needs to be formatted with the mask R$. To do this, select the measure; in the Measurement Tools menu there is the Format option. On the arrow next to the $ symbol, 
+views
+With the data ready to be presented, it's time to build the views!
+
+In the Views Panel, click the Donut chart. It will be added to the workspace so that it can be formatted and prepared with data from the data model.
+Just below the views are three buttons that allow you to apply settings to the added chart. The first button, from left to right, is the Fields button, where we will choose the data model fields for the chart. In the Legend item, the attribute that will represent the donut slices must be added. In the item Values, the measure that will be analyzed in this chart must be added.
+
+The Format button allows you to format the graph area and change the appearance of the thread, the title legend, the format of the value presented in the thread, among others. The formatting of the previous graphic has the following settings:
+
+Caption: Position – Central Right; Title – Enabled; Legend name – Product; Color: Dark grey; Text Size – 11pt.
+Detail Labels - Enabled; Label Style - Percentage of Total; Text Size - 12pt; Label Position – External.
+Title – Enabled; Title Text - Products Sold; Font Color – Dark Gray; Alignment – ​​Center; Text Size – 20pt.
+Shadow – Enabled; Leftover position – External; Default: Bottom right.
+To add an analysis of sales by product category, copy and paste the Product Sales chart.
+
+Select it and click the stacked bar chart in the Views Panel. The graph is quickly transformed into bars.
+In the Fields button, delete the Product attribute and add the Category attribute.
+Use the formatting items on the Format button to change the bar colors in the Data colors item.
+Place next to Sold Products view
+Filters
+Filters added to the query allow you to perform data analysis operations, restricting the set or changing the analysis perspective. To select data according to the year or according to the Season, defined by the set of data contained in the dim_data table, two views will be added that will allow the operations to be carried out.
+
+To add a Year filter to a query click the Slicer view. Add the year attribute in the Field Panel and rename it to Year, as shown in Figure 9. In the arrow contained in the visualization, choose the Enter option so that the Segmentation will have the format shown below. In this format, you can type in the years to be viewed or slide the circles from the bottom bar.
+To filter the seasons created in the data model add another Slicer view. This time, it will be configured with the Season of the Year attribute contained in the dim_data table and its type will be List.
+To complete this analysis we are going to add two views to total the amount of products sold and the total value of product sales. To do this, add the Multi-Line Card view.
+
+In the Field Panel, add the Qty of Products Sold measure.
+Format the Data Label with the text size equal to 16pt and Category Labels for the size 16 and dark gray color.
+Finally, copy and paste the Qty Products Sold view and replace the measure by adding the Revenue measure.
+To finish the query add a text box with the title. By selecting the workspace, you can change the appearance of the analysis background. In the example illustrated below, the picture fundo.png was added to the Wallpaper item, however only the background color can be changed.
+
+Tip
+The feature of adding pictures as wallpaper is interesting as you can create a special design for your dashboard.
+Drill and Hierarchies View Example
+The image on the right illustrates an example of Drill Down analysis operations between Category and Products data. The Matrix view has the table feature with the possible Drill on related data such as Product Category and Product.
+
+By clicking on the option Go to the next level in the hierarchy, the navigation to the next level of data is performed, and by clicking on the option Expand whole field one level down in the hierarchy on the icon, the data of the level above is maintained and the hierarchy displayed.
+To exercise creating queries and using views, choose and build one more query from the list of predefined queries.
+
+ To add a new page, use the bottom bar of the window, as shown in Figure 15. Click the + button highlighted in yellow, and after adding the new page, rename it to a preferred name.
+ Publication of Consultations
+Publishing queries allows you to share the analyzes with other users who will be able to view the queries and interact with them by browsing the available views. Applying security, with access control to queries, is only possible with the Pro version of Power BI. In this release, a line-level security (RLS) feature is available, which restricts access to data to authorized users.
+
+know more
+To publish queries it is necessary to have a corporate or student account.
+The published query can be incorporated into public or private websites. It is noteworthy, regarding the security of the data being shared, that in the Pro version there are several resources that can be used, both for access control and for sharing queries.
+
+In this class we look at creating queries using M and DAX functions, views, filters, formatting, and publishing queries to the Power BI online server.
+Power Query is a data transformation and preparation tool, allowing you to perform the data extraction, transformation and load (ETL) step for projects that do not have this step defined.
+O DAX é um conjunto de funções e operadores utilizados para criar fórmulas e expressões no Power BI. São exemplos de funções DAX: SUM, DISTINCT, AVERAGE, COUNT, COUNTDISTINCT, DATE e DATEDIFF.
+OLTP applications aim at data visualization with low data update, when there is. The content of these applications allows for historical analysis over time, as they store large volumes of data that are inserted as they occur in the source systems.
