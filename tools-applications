@@ -1,0 +1,137 @@
+BI Applications - What is OLAP? Tools and Application
+Presentation
+In this class, the OLAP concept - On-line Analytical Processing will be presented, the characteristics of OLAP tools, the data analysis operations: Slice, Drill-down, Roll-up, Pivot, Drill-across, Dice, Drill-through; the introduction to the Microsoft Power BI analytics query construction environment.
+
+Goals
+Describe the concept of Online Analytical Processing (OLAP);
+Recognize data analysis operations and features of OLAP tools;
+Examine features of the OLAP Power BI tool.
+BI Applications
+The last track of activities defined by Ralph Kimball in the life cycle of a Data Warehouse project is composed by the definition activity, BI Application Specification (BI Application Design), and construction of the data visualization layer, Development of the Data Warehouse Applications BI (BI Application Development).
+
+Comment
+In the requirements gathering phase, the main analytical queries were mapped according to the users' needs. The BI Application Specification phase should use this material and improve the documentation by adding information or modifying it as the project matures.
+The predefined queries must offer the main analyzes performed or desired by the organization, however new queries can be developed later by the users. When the use of queries defined by users becomes frequent by other users, they can be made available for others to use and thus, it becomes a standard query like those created by the project analyst.
+cicle of life for a datawarehouse project kimball 2013
+program, project planning, business requirement definition, technical architecture design, product selection and installation, 
+bi application design, bi application development
+dimensional modeling, physical design, etl design and development, deployment 
+growth, maintenance
+program/project management
+know more
+The development of analyzes depends on the database created with a loaded data sample and the tool for building the analyses, defined in the tool selection phase for the project.
+
+Due to the dynamism of the DW/DM analytical queries, the tools must present the resources that meet the needs of this scenario, which differentiates them from tools aimed at operational environments (OLTP - Online Transaction Processing). Query construction tools in OLTP operating systems work with high speed in data manipulation, however they are inefficient in queries in analytical systems.
+The OLAP (Online Analytical Processing) tools are prepared to build and support the dimensional analysis present in the analytical environment, optimizing data reading and management queries carried out on large volumes of historical data.
+
+As seen earlier, data organized in a dimensional data model can be represented as an online analytical processing (OLAP) data cube, where dimensions are located on the axes of the cube and measures, contained in the Fact table, are located at the intersection of dimensions.
+
+OLAP processing aids the processing of multidimensional analysis and complex calculation operations. These operations are intended to assist the user in querying specific data in the cube and extracting only the information necessary for decision making.
+
+The term OLAP was first used by Edgar Frank Codd in 1993, who also described 12 characteristics that a tool must have to be considered an OLAP tool:
+
+Multidimensional Conceptual View – It must offer a multidimensional view and allow the crossing of data.
+Transparency – It must be adequate to the users' usual work without affecting the activities carried out and offer consultations as requested.
+Accessibility – It must be able to access the source databases, map the data and access only data necessary for analysis.
+Consistent performance of information – It must provide user-friendly queries and questions regarding the number of dimensions or the increase in the database must not affect the performance of the reports accessed by the user.
+Client/server architecture – The server must be able to meet the analysis requested by users, regardless of the station being used and the operating system used.
+Generic dimensionality – It must respond to the analyzes with the different dimensions contained in the model, being able to apply the same functions to any available dimensions.
+Dynamic handling of sparse matrices – Sparse matrices are matrices that have null elements. So most positions are filled with zeros. Thus, to save memory space, only nonzero terms should be stored and handled in order to improve computational efficiency.
+Multi-user support – Must provide simultaneous access with data integrity and security.
+Unrestricted operations on cross dimensions – It must allow the calculation and manipulation of data from any number of data dimensions and must not restrict or inhibit any relationship between them.
+Intuitive data manipulation – Data manipulation must be performed by the tool engine without the user's interference, who must navigate through the data in a simple way.
+Flexible queries – The data must be visibly organized so that they approximate the organization's views, allowing the user to perform any type of query.
+Unlimited dimensions and aggregation levels – It is recommended that the OLAP tool support at least 15 dimensions in the same model and that these allow multiple users to perform different levels of aggregation to the data.
+data analysis operations
+OLAP tools have a high capacity to perform calculations and manipulations between lines, work with hierarchies, among other functions. They have navigability allowing to carry out operations of greater detail of the data (Drill down) and less detail of the data (Drill Up/Roll up).
+
+In addition to the operations of greater and lesser detail of the data, there are others such as:
+
+Drill Across – Allows you to compare different measures on different facts related by at least one dimension in common. It's like navigating from one data structure to another, joining them together by shared dimensions. This makes it possible to compare the quantity of products sold and the quantity of products in stock by the same views, such as date and product.
+Dice – Allows you to cut the data cube according to the attributes of two or more dimensions contained in the dataset.
+Pivoting – Allows you to visualize the data with the change of the dimension axis.
+Drill through – Allows you to view a greater level of detail of the data being stored in the Fact table, where, for example, in the Supermarket scenario, the lowest level contained is in relation to the product sold and when it was sold. Drill Through goes beyond this analysis, using the order number stored in the Sales Fact table and accessing the order in the transactional system where it is stored.
+know more
+It is similar to Drill down, however accessing an environment outside the DW/DM dimensional scheme.
+OLAP Tools regarding the type of data storage
+There are several OLAP tools on the market that share the common goal of generating analytical queries based on large volumes of data. They have architecture based on the client/server structure aimed at supporting multi-users. However, OLAP tools can be classified into four groups: ROLAP, MOLAP, HOLAP and DOLAP. Know them below.
+ROLAP (Relational Online Analytical Processing)
+ROLAP-type tools work with data in relational structures, retrieve and process it according to user demand. They have the advantages of Relational DBMSs, however there is a concern related to query performance, as access to normalized tables compromises data recovery. Facts tables and aggregated Facts tables are stored in this architecture.
+
+Through SQL queries, the tool performs complex calculations on large volumes of data. However, the larger the dataset, the slower the query response
+MOLAP (Multidimensional Online Analytical Processing)
+MOLAP-type tools work with special storage characteristics for processing dimensional data, in OLAP cubes, and rely on summarized and pre-calculated data responding to queries faster. Facts tables and aggregated Facts tables are stored in dimensional cube format.
+
+They allow for in-memory data manipulation, but despite the benefit of faster query responses, this architecture is limited in terms of storage.
+HOLAP (Hybrid Online Analytical Processing)
+HOLAP-type tools combine the benefits of previous types by storing the data — part as ROLAP and part as MOLAP — where the relational structure is usually used for the Facts tables (greater level of granularity) and the dimensional structure is used for the storage of aggregated Fact tables (lowest level of granularity).
+DOLAP (Desktop Online Analytical Processing)
+In this architecture, the data structure is transferred to the desktop station that requested the analysis in order to minimize information traffic on the organization's network.
+OLAP Tools
+Every year, the Gartner Group analyzes the companies and tools available in the technology market and publishes a report with the well-known Magic Quadrant, which classifies BI tools in relation to several aspects, such as technological innovation and the breadth of user needs and compliance with that the solution is proposed.
+
+Some of the tools contained in Gartner analytics are: IBM, Microsoft, MicroStrategy, Oracle, Qlik, Salesforce, SAP, SAS, Tableau
+
+Microsoft presents itself as the current leader among OLAP tools and is represented by the Microsoft Power BI tool, a tool that makes it possible to access data from local sources (Excel spreadsheets, DBMS, among others) or from the Microsoft Azure cloud.
+For the execution of the examples and exercises, we will use the Power BI Desktop tool.
+
+You can download the tool for free from the Microsoft website.
+Microsoft Power BI
+Power BI is a set of tools aimed at strategic analysis, allowing you to create interactive views and has a simple interface that facilitates the creation of analytical applications, including by end users.
+
+know more
+Power BI has a free version that allows you to create reports and dashboards, use modeling and data treatment resources using the Power Query editor and publish reports. In this version, there is no user control, so every user who has the link will be able to access the analytics. This, in an organization, is generally not practiced, as the management data is not open to the public or to all users of the organization.
+
+For this need there is the Pro (paid) version, which has user access control. However, only users who have a Pro profile will be able to access the reports.
+The Power BI interface is very intuitive and makes it easy to navigate between available features.
+On the left side of the window there are three buttons:
+
+Report
+Displays the work area where reports are developed.
+
+Data
+Where you can view the data loaded into the environment.
+
+Model
+Lets you list the loaded data.
+In this panel it is possible to see the loaded tables and relate them obeying the keys created in the dimensional data model.
+
+The Filters panel displays the tables and fields contained in the report, allowing you to apply filters to the queries contained in the report and view the filters that have been applied.
+ The Views panel lists the elements that present the data in the report, such as cards, charts, and tables. In addition to the available Views, there are others that can be added to the dashboard as needed for the queries you are developing.
+ The Fields panel displays the tables contained in the Power BI data model, the fields, and the measures and attributes created from existing fields.
+Get Data
+The first action to be done is to connect Power BI to the database that we will query to build the analyses. To do this, just click on the Get Data button. In this step, a menu with data source options opens. If the data source you are going to use is not available, click the More button and the window illustrated by the image will open.
+
+For our examples we will use the database contained in PostgreSQL.
+After choosing the data source, click the Connect button. You will be asked for the server and the name of the database. Fill in the information and click on the Ok button.
+After connecting to the database, the Dimensions tables and Facts tables will be displayed to be selected and loaded into the Power BI environment.
+
+Heads up
+The Load button is responsible for loading the structure of tables and data directly into the tool, and the Transform button allows you to apply rules, cleans, etc., before loading. This function is very useful if you are reading raw data and need to transform it.
+
+The image illustrates the tables contained in the dimensional data model of the Supermarket scenario. At this stage, the tables that will be used in the construction of the analyses must be selected.
+
+In our example, the tables starting with the prefix dim_ (dimension), ft_ (fact) and agr_ (aggregate) must be selected.
+After clicking the Load button the tables are displayed in the Fields Panel.
+After loading the dimensional data model tables, click the Model button (third button on the left side of the window) to verify and correctly relate the SK keys of the dimensions to the Fact tables.
+
+ 
+In this panel, the tables are displayed, as well as the relationships between them. When loading the tables, Power BI checks the column names that appear to match and automatically creates the relationships, assigning cardinality, direction, and relationship properties.
+
+Check for any inappropriate relationships. To do this, right-click on the relationship (yellow highlighted line) and choose the option Delete to eliminate the relationship or Properties to adjust the relationship.
+Tip
+The highlighted yellow line represents the connection of the Date dimension with the Aggregate Fact table Agr_Profit_Product. The relationship defines that an element contained in the Date dimension can be related to several rows contained in the Agr_Profit_Product Fact table.
+
+The window illustrated below shows the tables contained in the relationship, the related fields, and the cardinality of the relationship
+Once the data model is loaded into Power BI and correctly related, queries can be built.
+
+It is worth noting that OLAP tools have different ways of working, characteristics and functionalities. The tool should be chosen based on the organization's needs and possibilities.
+As an exercise, perform the data preparation steps in the Power BI tool presented so far.
+
+In this class, the OLAP concept, characteristics of OLAP tools, data analysis operations were examined: Slice, Drill-down, Roll-up, Pivot, Drill-across, Dice, Drill-through and the OLAP tool Microsoft Power BI .
+
+Now, based on the applied concepts, let's fix the understanding!
+Data organized in a dimensional data model can be represented as an online analytical processing (OLAP) data cube. About this technology, it is possible to say: Online analytical processing is a technology that processes data organized in dimensional models and performs complex calculations in order to help users extract specific queries from the database to meet their needs and support decision making.
+It performs multidimensional data analysis and processes complex calculation operations.
+The OLAP tools have data navigability allowing to carry out operations: Using the OLAP tools, it is possible to perform navigation operations on the data, such as slicing the data cube (Slice), changing the perspective of the data by changing the dimensions in the rows and columns (Pivoting) and verifying a level of detail in the data greater than the available in the fact x dimension relation (Drill through).
+According to the architecture of the OLAP tools, they can be classified as: OLAP tools have architectures that work with data in relational structures (ROLAP), in data cubes (MOLAP), in hybrid structures that join the relational to the data cube (HOLAP) and also tools that process the data in the user's station (DOLAP).
