@@ -1,0 +1,147 @@
+ETL Process - Transformation and Data Loading of Dimensions Tables
+Presentation
+In this class, the following will be presented: the steps of data transformation and data loading in the definitive tables; the implementation of data validation in temporary tables using the ETL tool Pentaho Data Integration (PDI); and loading the data into the dimensions of the dimensional data model.
+
+Goals
+Describe the step of data transformation and application of business rules;
+Examine the types of transformations applied to data in the ETL process;
+Demonstrate the data loading step in the dimension tables of the dimensional data model.
+ETL Process - Data Extraction, Transformation and Loading
+In the previous class, we learned about the ETL process, how data extraction can be performed, what types of data sources can be used for extraction — such as structured, semi-structured and unstructured sources — and we also knew about the ETL tool that facilitates the development of the steps to be performed in the ETL process.
+
+In this class, we are going to work on data transformation, which is performed after it is extracted. This step cleans up the data and applies transformations to conform to the data that will be loaded into DW/DM. Finally, we will see the loading of data into the final DW/DM tables, which happens after cleaning and transformation, when the data is already prepared for accommodation in the dimensional view.
+
+The following image illustrates the collection of data from the data sources, storage in temporary tables, the treatments and application of business rules to the stored data, and loading on the Dimensions tables and Fact tables drawn on the dimensional data model.
+The extraction step, represented by the orange arrow, accesses the source database, copies the data and inserts it into the temporary tables. The transformation step accesses the temporary tables, alters the data to make it conform to the defined rules; and the load step, represented by the green arrow, reads the processed data from the temporary tables and inserts it into the Dimensions tables and fact tables defined in the dimensional data model.
+
+Next, we will deepen the knowledge about the data transformation step.
+
+ Data Transformation (Cleaning and conforming)
+The second step in the ETL process is data transformation. Data cleaning and transformation tasks are very important, as it is at this point that they undergo the necessary transformations for presentation in DW/DM. In addition, this step contributes to the improvement of source systems, due to data validations that point out problems, which were not verified when entering the source system.
+
+In this step, the business rules defined in the requirements survey and the transformations to adapt data to be loaded in DW/DM are applied.
+
+The data transformation step has some common types of treatments, such as:
+Column Selection/Column Deletion
+When loading data from a source, not all columns may be required, so it is possible to select only a few columns to be loaded into DW/DM.
+data translation
+Identify the meaning of a data and adapt the representation of the data in DW/DM. For example: 1 for Male and 2 for Female; 1 for House Type and 2 for Apartment House Type.
+Derivation of values
+Build new values ​​from existing values. For example, Profit Value calculated from the Sell Price and Cost Price metrics.
+data join
+Standardization of data that have the same concept with different visualization, in order to unify data from different systems.
+Creating keys
+Creation of auxiliary keys (SK – Surrogate Key) with unique identification in the Dimensions tables.
+Transposition or rotation (pivoting)
+Transform rows to columns or columns to rows.
+data division
+From one column create other columns. For example, the date column can be split into the Month and Year column.
+aggregations
+Data summary.
+The treatments applied to the data aim to obtain the expected conformity for the analytical environment being built, seeking the desired data quality so that the analyzes offer value to the organization.
+
+know more
+The transformation applies tests that check data quality, such as null values, existing element codes, validity of dates, among others. If problems are found in the data, they must be registered so that the person responsible can evaluate and correct the data in the original database, if applicable. In more delicate cases, the ETL process can be suspended so that the issue can be analyzed. In other cases, the value Not Informed is assigned.
+
+Problems found are usually recorded in a log table, which indicates in which Dimension or Fact table the error occurred, the record that generated the error, the type of error, among other information that allows tracking of its origin.
+
+There are systems that send notifications to data managers and/or those responsible for the processes, alerting about errors that have occurred. This is very interesting as it does not allow the errors generated to be forgotten.
+Data validation aims to verify if the data is consistent with the established rules. A number of treatments are verified in this step. Dimensions tables and Facts tables have different validations and trouble tickets. In Dimensions tables, for example, it is necessary to check if the element to be inserted is already in the table or if only one data update should be performed. On the other hand, in Facts tables, it is necessary to verify that the elements that make up the primary key have valid values, that the record is not duplicated, among others, in addition to the very common data derivation in DW/DM systems.
+
+After data transformation, they are ready to be loaded into the definitive tables in the Data Load step.
+
+ Data Loading (Loading or Delivering)
+The last step, and not the least, is the loading of the data. This step is intended to verify the data that is ready to be loaded into the Dimensions tables and Facts tables of the dimensional data model defined for the project.
+
+As seen in the previous class, the frequency of data loading in DW/DM varies according to the organization's need. Data latency, referring to the speed with which data from the source system is made available in DW/DM, must be analyzed so that the process meets the organization's needs.
+Another concern is how data is loaded into the analytics environment. There are businesses that need data to be erased in order to be reloaded, while there are other situations where new data is just incremented in base and old data is only updated. Large systems keep records tracking every change made to the data. This helps to understand the business in the modifications carried out and the explanation in cases of data auditing.
+
+These elements must be carefully analyzed in order to apply them, as their implementation depends on the needs of each organization and each subject dealt with.
+
+ Transforming and loading data into the ETL tool
+As we saw in the previous class, the ETL tool facilitates the construction of the ETL process, which is very costly in DW/DM projects. As well as reading data and inserting records into tables, the transformation has a few steps to perform the various data processing tasks.
+Where:
+
+Add Sequence – Gets the next value of a sequence object created in the database.
+Calculator – Creates new calculated fields.
+Concat Fields – Concatenates multiple fields into one field.
+Replace in string – Replaces the occurrence of a word with another word in a string.
+Select Values ​​– Selects or removes fields in a row.
+Split fields – Splits a field into other fields.
+Dimensions must contain two records to handle situations where the code of an element Not Informed — for example a sale that does not have the customer identification, or Not Applicable for situations where the data does not apply to an analysis context . Then, enter the elements in the Category, Product, and Customer dimensions.
+Example
+INSERT INTO dim_category(sk_category, cd_category, ds_category) VALUES (1, 0, 'NOT INFORMED');
+
+INSERT INTO dim_category(sk_category, cd_category, ds_category) VALUES (2, 0, 'NOT APPLICABLE');
+
+Note that the elements received codes 1 and 2, so the sequence must start at code 3. The following image illustrates an example of how to change the current value of sequence in PostgreSQL DBMS.
+In DBMS, open the Sequences group and right-click on the desired sequence, choose the Properties option and change the Current value field.
+DWSuper – Implementation of data transformation and loading steps
+Continuing the examples created in previous classes, we will implement data transformation and loading on dimensions of the dimensional data model. The following image illustrates the Category Dimension transformation. The step Read Temporary Category selects the elements loaded into the temporary category table and checks whether they are new elements or whether they already exist in the Category Dimension table. The query will return all records that are present in the temporary table and the corresponding element in the Category Dimension.
+Through the category code (cd_categoria) it will be checked if the element is already registered in the dimension. If it is not found, the element must be inserted. To generate an SK key for the element, it will be necessary to call the sequence created for the Category Dimension. If the element is found in the dimension, it must be updated. To perform the insert or update step of the element, the Insert/Update step must be used.
+
+In complex systems some common errors can occur and must be dealt with, such as the element contained in the temporary table, which may not have the record code in the source system or the record does not have a filled description. Each case should be handled as needed. In our example, if the code (cd_categoria) is not filled in, the record will be discarded and added to a log text file. If the description is not filled in, it will receive the value “BLANK DESCRIPTION” and will be inserted into the dimension.
+
+To test the previous validations, insert the two lines below in the source database (Category Table):
+INSERT INTO public.categoria (code, description) VALUES (NULL, 'BAKERY');
+
+INSERT INTO public.category (code, description) VALUES (220, NULL);
+See all objects inserted for the treatment of Category Dimension data.
+Each of the steps has a specific treatment function to be applied. The steps must be used in transformations as needed for the treatments that must be performed on the data. See below each of the steps used to handle the category dimension data.
+Step Check Category Code (Filter Rows)
+The image illustrates the null test of the cd_categoria_tmp field. If the condition of not being null (Is Not Null) is true, the next step is to read the sequence created for the Dimension Category (Send ‘true’ data to step). Otherwise (Send ‘false’ data to step), the next step is to insert the record in the Category Dimension payload log file.
+Read Sequence Dim Category (Add Sequence)
+
+See the Add Sequence step which reads the next code for the sk_categoria field to be inserted into the Category Dimension.
+Validate Description Category (Modified JavaScript value)
+
+Now look at the Modified JavaScript value step that is used in building JavaScript expressions to modify the data. The code typed in the script area is executed once on each line to handle the indicated values. So, to check if the category description is empty, the ds_category_tmp field should test for null. If the answer is true, the variable vardescricao receives the value "BLANK DESCRIPTION"; otherwise, the variable receives the value contained in the field.
+Insert /Update Category (Insert/Update)
+
+ The figure illustrates the Insert/Update step, which checks if the record should be inserted or if it should be changed based on the category code field (cd_categoria) in the The Key(s) to look up the value(s) grid. In the Update Fields grid, the fields that will be changed or inserted must be listed. The Update column is informative about whether the listed field should be changed. Note that the cd_categoria and sk_categoria fields cannot be changed, only inserted. Also note that the chosen description field (Stream Field) is the variable that handled the category description in the previous step.
+ Insert Log Load Log (Text File Output)
+
+See the step that will add the data from the discarded record in validation. For this, the file extension, the path and the name of the file that will receive the log must be informed in the File tab; on the Content tab, the type of field separator must be informed, according to the chosen file extension, and on the Fields tab, the fields that will be inserted in the log file must be added.
+With the transformation ready it's time to run it completely. The following figure illustrates the completion of execution of the Transf-Category transformation. It is not uncommon for errors to occur while executing a step. If this occurs, check the error displayed in the window that will open, correct the problem and run the transformation again.
+The image illustrates the discarded records inserted in the logcarga file after the execution of the Transf-Category-Product transformation:
+After the transformation runs, the Category Dimension is populated with data extracted from the Category source table. The Figure illustrates the records inserted in the Category Dimension after the execution of the Transf-Category-Product transformation. Note that the Bakery element was not inserted and that code element 220, which had no description filled in, was treated and has registered element.
+
+When the source system fills in the Bakery element code, it will be inserted in the Category Dimension and when the 220 element has its description corrected, it will be updated in the dimension.
+Let's practice?
+
+Now, as an exercise, complete the transformations of the Product and Customer dimensions with the steps for handling and loading the data.
+The Data Dimension can be uploaded using the spreadsheet available on the Kimball Group website (https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/books/data-warehouse-dw-lifecycle-toolkit/). The Excel spreadsheet that contains the columns and rows for the Data Dimension load can be changed as required by the project. If you want to start on a certain date, change the start date in the cell address Column Full Date.
+
+Use the Microsoft Excel Input step to read the data in the spreadsheet, on the Files tab choose the downloaded Excel file and configure it as illustrated.
+Add the Table Output step to insert the data in the Data Dimension, link to the Microsoft Excel Input step and configure. Note that a good practice would be to change the selected column names to Portuguese names, as they will be used as report headers and analytic queries.
+
+ Load of the Date Dimension. Source: The author
+At this moment, the dimensions of DW Supermercado are filled with the processed data extracted from the original databases, waiting for the loading of the fact tables of the dimensional data model that will be seen in the next class.
+
+In this class we study the process of transforming and loading dimension data into the dimensional data model, using the ETL Pentaho Data Integrator (PDI) tool.
+
+Now, it's time to fix understanding!
+The ETL process consists of three steps: data extraction, data transformation and loading. About the ETL process, it is correct to state that:
+
+a) Data extraction reads and copies data from the source database, data transformation cleans them and applies established business rules, and the data load loads the processed data into the destination database.
+b) Data extraction reads and applies the data transformation in the source database and the data load loads the processed data in the destination database.
+c) Data extraction reads and copies data from the source database, the transformation loads the processed data into the destination database.
+d) Data extraction reads and copies data from the source database, data transformation performs data cleaning and applies established business rules and data loading informs the source databases whether the data is correct or if there are integrity issues.
+e) Data extraction checks whether the data exists in the source database, data transformation copies the data to the temporary tables and the data load loads the processed data into the destination database.
+A. The extraction aims to access, read and copy the data to the temporary tables where the transformation step will clean the data and apply the necessary rules for the data to comply. Finally, the data load reads the prepared data and loads it into the Dimension tables and Target Fact tables.
+The Data Transformation step applies various types of treatments to the data. One of them is the division that:
+
+a) Selects or excludes columns referring to data collected from source sources.
+b) Adjust the content representation by identifying the meaning of the data.
+c) Builds new indicators from other indicators.
+d) Transforms rows into columns and vice versa.
+e) Create other data columns from a data column.
+e and. Splitting is to create new data from an existing column. Widely used to treat dates, in which the month, year, among others can be extracted.
+The ETL PDI tool has steps that perform data reading tasks, transformations, data loading, among others. We can cite as an example of steps:
+
+a) Table Input, Add Sequence and ETL.
+b) Data Mart, Filter Rows and Modified JavaScript value.
+c) Insert/Update, Modified JavaScript value and PDI.
+d) Table Input, Filter Rows and Modified JavaScript value.
+e) Modified JavaScript value, Table Output and Spoon.
+d. PDI has steps that allow you to perform tasks such as reading data, transforming data, loading data into tables, writing data into files, among others. There are a large number of steps available and as an example we can mention: Table Input, Add Sequence, Filter Rows, Modified JavaScript value, Insert/Update and Table Output.
