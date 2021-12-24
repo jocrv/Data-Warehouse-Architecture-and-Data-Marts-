@@ -1,2 +1,162 @@
 part 2
 Lesson two Data Warehouse project needs the requirements in this part must fulfill the lifecycle of a Data Warehouse DW project defined by RA T H K, I, M, DA, L, L. The importance of requirements gathering for DW projects. The documents that can be prepared to support the Bi-user intelligence analysts of the entire maintenance and growth cycle of the environment in this class will be necessary in the lifecycle of a data warehouse project defined by an importance of requirements gathering for DW projects. The documents that can be created to support the analysts of an intelligent bisines Users and the entire cycle of maintenance and growth of the environment. 
+Lesson two Data Warehouse project needs the requirements in this part must fulfill the lifecycle of a Data Warehouse DW project defined by RA T H K, I, M, DA, L, L. The importance of requirements gathering for DW projects. The documents that can be prepared to support the Bi-user intelligence analysts of the entire maintenance and growth cycle of the environment in this class will be necessary in the lifecycle of a data warehouse project defined by an importance of requirements gathering for DW projects. The documents that can be created to support the analysts of an intelligent bisines Users and the entire cycle of maintenance and growth of the environment. 
+Goals. Describe the lifecycle of a DW project. Explain the requirements gathering process for the DW. Clarify how documentation for a DW can be constructed. The main points to be documented in this phase and the beginning of meta data construction.
+The lifecycle of the data wearhouse DW as we saw earlier, the DW is a management information system focused on supporting decision-making that is normally carried out by the organization's managers. We also saw that the construction of DW DH needs to be aligned with the organization's needs. With the availability of resources and data. The construction of the DW must consider these points and also must have a development plan so that the goals are achieved. The development of a project is divided into phases and has a beginning and an end for any activity that involves several phases that needs to plan their execution. The planning program Project planning is the first phase of the life cycle of a DW project. According to the definition of KI mDALl presented in the figure below. In this phase, the feasibility of resources, the tasks to be developed in the project and their chain are defined in the project scope.
+program/project planning / business requirements definitions, 
+techinical architecture design/ product selection and installation/ deployment /maintenance
+dimensional modeling, physical design, etl design and development, deployment, maintenance
+bi application design, bi application development, deployment, maintenance 
+growth / maintenance
+program/project management
+Comment, project management keeps the tasks to be developed, organized so that they are performed according to plan. The project manager is responsible for monitoring the entire project lifecycle, acting as a facilitator in solving impediments during development. The second phase of the lifecycle is the definition of business requirements. Business Requirements Definition and is directly linked to the first phase due to the need to know the requirements as the project scope is defined by the user's requirements, the relationship between these two phases is represented in the figure by the two-way arrow. Kimball claims that good planning and well thought out requirements definition increase the probability of success of a DW project because its development is based on the needs of business users and this supports the importance of these two phases for the development of DW.
+Note that the lifecycle is divided into three tracks after defining the business requirements. Track one, the first track is dedicated to the technologies that will be in the development of DW. DW Architecture The architecture phase of DW Architecture Technique is concerned with the structural definition and comprises the components necessary for the DW implementation. These components are related to data architecture, the infrastructure used, the technologies needed to build and use a DW. This phase is followed by product selection and installation. That defines the tools that will be used in the construction, performs the installation, performs the integration test and its execution. 
+track two The second track is dedicated to data treatment and links the phases dimensional modeling, defining the physical project and specifying the ETL. The dimensional phase. It studies the analyzes that will be developed in the analytical environment and joins the knowledge of the defined requirements to create a structure capable of accommodating the data dimensionally. In this fa the DW DM dimensional data model is defined. In the physical design phase following the physical design, the physical structure for the construction of the dimensional data model is defined, as well as the naming pattern used and the configuration of the database environment. After the physical definition of the database, it is time to define and build the processes that will extract data from the source systems. Transform and load the data into the definitive DW tables. This is the specification and development phase of the ETL. Extract transform and load ETL design and development. It is important to emphasize that the size of the boxes in each phase does not represent the effort made in each one of them. Building the ETL is a very slender task that demands approximately seventy percent of the effort put into the data trail.
+Track three. The third path in the lifecycle is focused on defining and building the data visualization layer. The design of queries desired by users is a very interesting artifact that contributes to aligning the expectations of users who will access the DW through predefined analyses. This definition is carried out in the bi application specification phase. Bi applied design. Title and text. Title and text only. Following the exercise task, the deployment phase of the bi application development applications. Builds queries into the analytical reporting set defined for the project. More examples the implementation phase of poimer is the union of the tasks developed in each cycle. It should occur when all phases are completed, new needs will arise after the implementation of the analytical environment which is part of the development and growth process of the DW of a growth is growt GROW TH R represented by the phase that begins with the planning of a new project but in this case it will be an add-on project finally maintenance is represented in the lifecycle of a DW project
+Requirements gathering for the construction of the DW data warehouse Project planning and requirements gathering produce the understanding of the need over the organization's need and the knowledge of the objective for the construction of the DW. That it must be and be well defined and that it justifies this without these definitions, the project's success is compromised since there is no objective for such a solution, the environment will not be used in its construction and its construction may not be signaled, imagine the scenario. Marcos is the sales manager of a large fast food chain every day at four o'clock, he needs to check if it is necessary to replace any item used in the cafeteria's snacks. If the item has compromised availability, it needs to send the replacement request to the replenishment department so that the item can be delivered the next morning.
+To control the milestone items, enter the order list, calculate the amount of snacks served in each order and calculate the set kits used to know whether or not it is necessary to replace any. This process is so costly for Marcos that there are days when he cannot finish the analysis in time to order items for the next day. What is the best solution to help Marcos? Let's analyze the Marcos problem what is the Marcos problem? The difficulty is to know whether or not it is necessary to request the replacement of items by five o'clock in the afternoon every day of the week. What is Mark's goal? Know if there is a need to request the replacement of any item daily and make the request within the deadline quickly. How does Marcos analyze the items? Marcos checks all orders and manually averages the items used in order to know if there are any items that need to be replenished. What can we offer to solve Marcos' problem. According to the need described, a report in the sales system will provide information about the items that need to be replaced. The investigation of Marcos' problem allowed him to verify the most adequate solution to solve his problem. Imagine if a DM were designed to solve Marcos' problem that would take two months to be fluid and, in addition, queries were built in which the lowest level of analysis was in month. For example, item quantity queries per month.
+Would this solution solve Marcos' problem? It wouldn't do. This query can be useful for another type of decision making. Including for the improvement of the Marcos process. But not for his current need. You've probably heard comments about a project that didn't work out and development was cancelled. Or that development was finished but users did not use the product that was delivered. Understanding the problem to be solved should be the first task performed for the development of a project. Because investigation allows knowing the scenario. Today steak holders or interested parties. The problem and possible solutions to be adopted. This first step is the gathering of requirements and applies to any type of project including the DW project. The gathering of requirements for the DW has particular characteristics in relation to the gathering of requirements for the operational support system. These characteristics are present in SAD decision support systems and we will get to them next. Requirements gathering. One, to understand the business need, two, to prepare documents with definition and concepts from the perspectives of analysis. Three, prepare documents with the measures that will be analyzed, four, prepare a document describing the desired analyzes, five, prepare a document pointing out the origins of the data.
+Characteristics of requirements gathering. Step one, understand business needs. The understanding of the need is carried out by the business analyst. He is responsible for investigating the need to understand the user's pains to translate the understandings into requirements for the project Kimball addresses the gathering of requirements focused on the business need and here the requirements determine what data must be available in the DW, as they are organized and contain frequencies. updated, the first step is to interview users and understand what activities are carried out by them. The activity carried out by the user helps to understand the flow of data that will be analyzed. You can hold more specific meetings with individual users, small groups or groups that bring together all those interested in DW. The strategy can be mapped out as needed. The gathering of requirements is supported by techniques that help to conduct the interviews. BA BOKA Business analysis body knowledge is a guide that brings together the main concepts and techniques that support business analysis.
+During requirements gathering, the information collected must be noted. The result of the survey will contain a description of the business scenario with the pains, objectives, desired analyses, among others. In the desired analyses, possible analysis perspectives and indicators can be identified. Analysis perspectives describe the events that occurred in a given matter, and indicators are the measures that can be described by analysis perspectives.
+
+Frequency of data loading in the Data Warehouse
+An important piece of information that must be verified when gathering requirements for the DW is the frequency with which the data will be loaded into the environment. The periodicity can be daily, weekly or monthly, or even in near real time. This decision depends on the organization's need.
+When data loading occurs daily, the ETL process accesses the transactional system database every day, following a time window for data extraction. Extraction normally takes place during the period when transactions from the source systems are slowed down, for example at night. This strategy is used so that data extraction does not compete with transactional operations, hindering the progress of operations in the organization.
+When the load is carried out monthly, the ETL process accesses the transactional system database after the monthly closing of the deal, populating the DW base only once a month.
+This information must be recorded in the main project specification document.
+Step 2 - Elaborate Analysis Perspectives document (Visions)
+Every understanding must be documented so that other analysts have access to project information. Typically, each organization uses the methodology that best fits their needs. However, regardless of the methodology adopted, the analysis perspectives need to be defined and described. They are represented by the Dimensions tables of the DW data model and contain data describing the facts. Let's understand with an example!
+Do you remember the supermarket analysis scenario discussed in the previous class? Let's remind you.
+Analysis scenario: supermarket
+Paulo and Ricardo are managers of a large supermarket chain. They hired the development of a solution that supports the organization's decision making. To understand the needs of Paulo and Ricardo, some survey meetings were held with them and with some users who build management analyses. During the meetings, the following information was collected:
+The supermarket has a sales flow support system that receives all the occurrences of purchase events carried out by customers, in physical stores and through e-commerce. All operations of addition, alteration and deletion of records take place during the period of customer service.
+Whenever a sale occurs, a service informs the inventory system which products were sold and in what quantity.
+Paulo and Ricardo need to carry out the following analyses:
+What are the best selling products in summer?
+Who are the customers with the greatest purchase potential in a given product group?
+Is the stock out of stock?
+Which are the manufacturers of the products that offer the greatest profit in marketing their items?
+According to the scenario, it is possible to understand that, in order to analyze which are the most sold products in the summer, we need to know the quantity sold of each product and when it occurred. Here we have the Product view, the Time view, and the Quantity of Products Sold measure. The Product view and Time view describe the Quantity of Products Sold measure, that is, they tell you which product was sold and at what time.
+
+To track product sales and inventory we have again identified the Product view and the Time view. However, we need to know the Quantity of Product in Stock. The Quantity of Product in Inventory is another measure identified.
+
+Measures are events that occurred at a given time. For example, the product was sold. The fact that occurred is the sale of the product and, in this case, in addition to knowing that the sale took place, we also know the quantity that was sold. So, the fact in this case is: 10 units of the soap product were sold. This concept will be detailed later.
+
+In the final analysis desired by users, in addition to the Product view, which other view(s) or measure(s) can be identified?
+Answer: The Product Manufacturer view and the Profit measure.
+
+However, during the requirements gathering, users were informed that the Profit is not in the source system. To obtain Profit at the end of the month, the value of the product's sale is extracted through a report in the SisVendas system, as well as the price of the product purchased at the Manufacturer is extracted from the SisStock system. With the two pieces of information in a spreadsheet the profit is calculated.
+
+Here we have a calculated measure that needs to be documented with the calculation formula, so that it is possible to present the expected result.
+
+After identifying the analysis views, it's time to document the information obtained about them. This information can be verified with the managers and deepened with the analysts responsible for the source systems (transactional systems).
+
+The Vision (Dimension) contains the data referring to the domain being treated. For example, the Product view contains the Product code, which is important in identifying the product in the source system; the product description, which allows you to know which product is being analyzed; and the manufacturer of the product.
+
+The following figure illustrates the Product View documentation. The Analysis View column contains the name of the view, the Attribute column contains the data referring to the product, the Concept column describes each of the attributes. The concept is extremely important for an analytical environment, as the user and analysts will know what the data is, both when building the analysis and maintaining the environment.
+The Examples column contains some examples of the data to assist in the next steps of the project. The Observation field is free to add important comments about each data, if any, and business rules that should be applied to them.
+Let's practice?
+
+In addition to the aforementioned views, there are two more important views for the scenario. Can you identify them?
+
+Answer: Customer and Product Category views.
+
+Step 3 - Prepare a document with the measures to be analyzed (Indicators)
+Once you've documented the analysis views, it's time to document the measures, also known as Indicators. The Indicators are organized in Fact tables, which record the facts that occurred, as previously mentioned.
+
+In the supermarket scenario, some Indicators were identified: Quantity of Products Sold, Quantity of Product in Stock, Price of the Product Sold, the Price of the Purchased Product from the manufacturer and the Profit of the Product Sold.
+
+The figure below illustrates the conceptualization of the Indicators identified during the survey with users. The Indicator column lists the name of the indicators, the Concept column lists the concepts/definitions of the indicators, the Formula column describes how the indicators should be calculated and the Observation column contains additional information.
+Granularity matrix
+
+To facilitate the understanding and understanding of the relationship between the Visions and the DW/DM Indicators, we have the granularity matrix. In a matrix format, the Views (Attributes) and the Indicators that are related to these views are organized. Figure 5 illustrates the relationship between the views identified in the survey and the indicators that will be analyzed in the predefined queries. The Time, Customer, Manufacturer and Product Views are organized on the X axis of the matrix. On the Y axis, the Indicators Quantity of Products Sold, Quantity of Product in Stock, Price of Product Sold, Price of Product purchased from the manufacturer and Profit of Product Sold are organized.
+
+According to the matrix, we know that the Quantity of Products Sold can be analyzed by the date of sale of the product to the customer. For example, I can know the amount of soaps sold on 8/20/2020, on 8/2020 or on 2020.
+In our example there are few views and indicators and this makes it easy to know what are the possible crosses between them. However, in the survey of a real DW/DM, there are numerous crossings and the matrix allows the visualization of the analyzes that will be possible in the analytical environment in a simpler and more objective way. In addition, the granularity matrix supports the analysts who are working on the project.
+
+Did you notice that this matrix is ​​called Granularity Matrix? Granularity refers to the DW/DM analysis grain. The grain is the level of detail in the data, where the more granular/small granular, the more detailed the information, the higher the granularity, the less detailed the information.
+
+For example, you can analyze the Product Sold Price by date of sale (day, month and year) and the Price of Product Purchased from Manufacturer can only be analyzed by month and year. This means that information about the sale of products to the customer is more granular than information about the purchase of the product from the manufacturer to supply stock.
+Step 4 - Prepare a document describing the desired analyzes (Consultations)
+The predefined analysis document must contain the layout of all queries desired by users and identified during the needs assessment. It may happen that new analyzes appear throughout the project. If this new analysis uses the visions and indicators already mapped in the survey, it is simple to design this new layout and deliver the analysis to the customer, leaving them satisfied with the delivery, adding value to the organization.
+
+However, if the visions or indicators are not mapped, project participants, both analysts and users, must be brought together to define the best way to meet the new need. For this, some points need to be considered in the impact on the project, such as time and money.
+
+The description of an analysis must contain the design of the report or dashboard so that it is possible to align expectations with the customer. The design allows him to visualize his future reviews more easily and closer to the product that will be delivered.
+
+In addition to the drawings, the following must be present: description of each analysis with the objective, attributes that will be included in the analysis, indicators, mandatory filters and dynamic filters, if necessary. The figure illustrates an example of a query specification.
+Step 5 - Prepare a document with annotation of data sources
+With the mapping of analysis views and indicators, it is possible to verify the origin of the data. This verification is normally carried out with the analysts responsible for transactional systems. The existence of each of the views and indicators in the source system must be checked.
+
+Pointing out the origin of the data is very important, because it may be that the data does not exist in the transactional system, or it may not be possible to extract it from the source system. Once this situation occurs, it must be informed to the manager so that the understanding is aligned on the data.
+
+The Figure illustrates an example of pointing out the origin of the data.
+Data Source Mapping
+See now the steps of Mapping Data Sources: 
+Step 1 – Check the pointed origins
+Mapping the data sources is a more detailed verification of the origin of the data mapped in the previous steps. With the specification of the need and the defined concepts, the analyst who performs this task will be able to locate the data in the source system, know its real location, with the name of the table that will be accessed, the name, size and type of data of the field . If the transactional system is very old or there is no documentation about it, further investigation of the origin can bring surprises that need to be addressed and worked around.
+
+The concept obtained from the managers will help to identify the data in the source system and is used in data integration, if they come from different systems. During the mapping of sources, rules can be defined to be applied in the ETL construction stage.
+
+Step 2 - Prepare a document mapping the data sources.
+The Data Source Mapping document can be an extended version of the data source document, adding the information raised by the technical analyst.
+Metadata
+The Metadata bank gathers important information that support the development of DW. Known as Data on Data, it allows the understanding of what the data is, what are its characteristics (type, size), what is its origin, what is its destination, what are its relationships, among others.
+
+As defined by Barbieri (2020), Metadata can be classified into three types:
+
+1
+Business Metadata
+Contextualizes the data in the business view.
+
+two
+Technical/Physical Metadata
+It concerns structure, size, domain, among others.
+
+3
+Operational Metadata
+Related to processes, routines, treatments associated with data, among others.
+Metadata contribute to the ETL process, with analysts, with users and behave like a dictionary that guides the understanding of all data contained in the DW and the processes they make available in the analytical environment.
+
+Heads up
+Since the beginning of the requirements gathering, information is being collected and will be part of the project's Metadata bank. Its maintenance must occur throughout the project development cycle, when maintenance or growth of the DW occurs.
+
+In this class, we study the importance of gathering requirements for a DW/DM project, how to understand the users' needs and the importance of documenting the acquired knowledge. We also saw that the documents prepared are used by analysts who participate in the construction of the DW/DM, by users who will carry out their analysis in the environment and by people who may in the future interact with the analytic environment.
+Activities
+1. The development of a project is divided into phases and has a beginning and an end. To start any activity that involves multiple phases, you need to plan their execution. Planning is the first phase of the life cycle of a Data Warehouse project. At this stage, the following are defined:
+
+a) The project scope, the ETL process, the tasks to be carried out in the project and the mapping of data sources.
+b) The feasibility of resources, the tasks to be carried out in the project and their chain and predefined queries.
+c) The project scope, resource feasibility, granularity matrix and chain of project activities.
+d) The scope of the project, the feasibility of resources, the tasks to be carried out in the project and their chain.
+e) The scope of the project, the feasibility of resources, the tasks to be carried out in the project and the documentation of visions and indicators. // The project's planning phase aims to organize its entire life cycle so that the tasks to be performed are carried out successfully. For that, in this phase the project scope must be elaborated, which describes what will be developed during the project; resource feasibility, which defines whether the necessary resources are available to perform the tasks; the tasks to be developed in the project and their chain.
+2. Gathering requirements is an important step in project development:
+
+a) That develops operational support systems.
+b) For all projects, except Data Mart projects, as they have a smaller scope.
+c) For all projects, including Data Warehouse projects.
+d) If the objective and the data sources are known by the BI analysts, it is not necessary to carry out the requirements gathering.
+e) It is important in other projects, but does not apply to Data Warehouse projects.// The requirements survey defines the needs for the project to be developed and delivered in a way that meets the needs of the organization's users. Therefore, the requirement survey applies to any type of project, including the DW project.
+3. The gathering of requirements is supported by techniques that help to conduct the interviews. About BABOK, it is possible to say that:
+
+a) These are techniques used to guide the conduct of Data Warehouse projects.
+b) It is a guide that brings together the main concepts and techniques that support Business Analysis.
+c) It is a guide that gathers documents for the preparation of queries and the granularity matrix.
+d) It is the complete set of documents elaborated during the requirements gathering.
+e) It is a data dictionary used to build Metadata. // BABOK is a guide that brings together the main concepts, techniques and best practices that support Business Analysis and helps requirements analysts in identifying problems to be solved by the solution to be developed, in requirements elicitation, among others.
+4. The Granularity Matrix is ​​a document that:
+
+a) Lists Visions and Indicators, presenting the relationship between them and explains the grain of data in the DW/DM analyses.
+b) Lists Visions and Indicators, presenting the relationship between them and defining the queries that should be built.
+c) List the Indicators with the consultations in which they will be presented.
+d) It presents the grain contained in the operational support system, source of the DW/DM developed.
+e) Lists Visions that will be developed with their concepts and explains the grain of data contained in the DW/DM.// A. The granularity matrix helps to understand the analyzes that can be performed in DW/DM. In matrix format, it organizes the views (attributes) and the indicators that are related to them and presents the DW/DM analysis grain that informs the level of detail in which the data can be analyzed.
+
+5. Metadata is very important to BI systems and maintains relevant information about the data. The Metadata Database of a BI project:
+
+a) Documents the organization's extraction processes, concepts and user stories.
+b) Documents the data contained in the DW/DM, the treatments on the data, the relationship between them, the understanding of concepts and definitions and the verification of the business rules applied to the treatments performed.
+c) Documents the extraction processes, business concepts and definitions, and errors that occur in transactional systems that are sources for BI systems.
+d) Documents the mapping of extraction processes, the results obtained by the queries, but does not record business rules and concepts.
+e) It does not present knowledge about the environment, but statistics of the execution of queries carried out by users. //
+B. The metadata of a BI project documents the information about the data, about the relationship of the dataset contained in the DW/DM, the treatments applied, in addition to the information related to the business.
